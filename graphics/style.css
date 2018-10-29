@@ -1,0 +1,21 @@
+html, body {
+    padding: 0;
+    margin: 0;
+}
+
+.spacer {
+    height: 100px;
+}
+
+#figure {
+    margin: auto;
+    height: 512px;
+    width: 512px;
+}
+
+svg {
+    overflow: visible;
+    height: 100%;
+    width: 100%;
+    /* border: 1px solid black; */
+}
