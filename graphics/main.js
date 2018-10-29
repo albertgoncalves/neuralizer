@@ -13,5 +13,4 @@ const colorFun    = (x, y) => (x + y) >= len ? colorA
                                              : colorB;
 
 drawGrid(squareInit, edges, edges, colorA, colorB, colorFun);
-
 changeColor(colorC, rectId(0, 0));
