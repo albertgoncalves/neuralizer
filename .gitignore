@@ -1,0 +1,11 @@
+*
+!.gitignore
+!*.md
+!*.nix
+!*.sh
+!js
+!*.js
+!graphics
+!.jshintrc
+!*.html
+!*.css
