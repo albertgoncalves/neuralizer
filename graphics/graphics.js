@@ -37,9 +37,7 @@ const changeColor = (color, id) => {
 const drawGrid = (squareInit, xEdges, yEdges, colorA, colorB, colorFun) => {
     xEdges.forEach(
         (x) => yEdges.forEach(
-            (y) => {
-                squareInit(x, y, colorFun(x, y), rectId(x, y));
-            }
+            (y) => squareInit(x, y, colorFun(x, y), rectId(x, y))
         )
     );
 };
