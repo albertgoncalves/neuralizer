@@ -5,7 +5,7 @@ const colorB      = randomHsl();
 const colorC      = randomHsl();
 const len         = document.getElementById("figure").clientWidth;
 const containerId = "axis";
-const res         = Math.pow(2, 4);
+const res         = Math.pow(2, 5);
 const unit        = len / res;
 const edges       = range(res).map((x) => x * unit);
 const squareInit  = createSquare(containerId, unit);
@@ -13,7 +13,7 @@ const colorFun    = (x, y) => (x + y) >= len ? colorA
                                              : colorB;
 const grid        = iterGrid(edges, edges);
 const drawGrid    = (x, y) => squareInit(x, y, colorFun(x, y), rectId(x, y));
-const colorGrid   = (x, y) => changeColor(randomHsl(), rectId(x, y));
+const randomGrid  = (x, y) => changeColor(randomHsl(), rectId(x, y));
 
 grid(drawGrid);
-// grid(colorGrid);
+// grid(randomGrid);

@@ -34,6 +34,6 @@ const changeColor = (color, id) => {
     document.getElementById(id).style.fill = color;
 };
 
-const iterGrid = (xEdges, yEdges) => (f) => {
-    xEdges.forEach((x) => yEdges.forEach((y) => f(x, y)));
+const iterGrid = (xs, ys) => (f) => {
+    xs.forEach((x) => ys.forEach((y) => f(x, y)));
 };
