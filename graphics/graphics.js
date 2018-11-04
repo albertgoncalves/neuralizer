@@ -34,10 +34,6 @@ const changeColor = (color, id) => {
     document.getElementById(id).style.fill = color;
 };
 
-const drawGrid = (squareInit, xEdges, yEdges, colorA, colorB, colorFun) => {
-    xEdges.forEach(
-        (x) => yEdges.forEach(
-            (y) => squareInit(x, y, colorFun(x, y), rectId(x, y))
-        )
-    );
+const iterGrid = (xEdges, yEdges) => (f) => {
+    xEdges.forEach((x) => yEdges.forEach((y) => f(x, y)));
 };
