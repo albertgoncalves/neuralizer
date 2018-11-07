@@ -1,5 +1,5 @@
 const random      = ()          => Math.random();
-const rectId      = (x, y)      => `grid-${x}-${y}`;
+const gridId      = (x, y)      => `grid-${x}-${y}`;
 const range       = (limit)     => [...Array(limit).keys()];
 const arrayToStr  = (array)     => array.map((x) => x.toString());
 const arrayToHsl  = ([h, s, l]) => `hsl(${h}, ${s}%, ${l}%)`;
