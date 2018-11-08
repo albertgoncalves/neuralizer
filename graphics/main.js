@@ -1,7 +1,22 @@
 /* pure functions */
+const findAll = (arr, val) => {
+    const is = [];
+    let i = -1;
+    for (i = 0; i < arr.length; i++) {
+        const _ = arr[i] === val ? is.push(i)
+                                 : null;
+    }
+    return is;
+};
 const checkGridId = (id) => id.indexOf("grid-") !== -1;
 const idToCoords  = (gridId) => gridId.match(/\d+/g).map(Number);
 const createColor = (color, hsl) => { return {color, hsl}; };
+const checkXY = (xs, x, ys, y) => {
+    const ixs = findAll(xs, x);
+    const iys = ixs.map((ix) => ys[ix]);
+    return findAll(iys, y).length > 0 ? true
+                                      : false;
+};
 
 /* params */
 const blue        = createColor("Blue" , "hsl(205,  85%,  65%)");
@@ -33,10 +48,8 @@ const selectGrid = (x, y, gridId) => {
 };
 const clickGrid = (gridId) => {
     const [x, y] = idToCoords(gridId);
-    const ix = xs.indexOf(x);
-    const iy = ys.indexOf(y);
-    const _ = ix !== -1 && ys[ix] === y ? null
-                                        : selectGrid(x, y, gridId);
+    const _ = checkXY(xs, x, ys, y) ? null
+                                    : selectGrid(x, y, gridId);
     // console.log(xs, ys, labels);
 };
 const keyAction = (key) => {
