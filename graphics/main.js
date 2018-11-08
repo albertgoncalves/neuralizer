@@ -1,20 +1,19 @@
 /* pure functions */
 const findAll = (arr, val) => {
-    const is = [];
-    let i = -1;
+    const inds = [];
     for (i = 0; i < arr.length; i++) {
-        const _ = arr[i] === val ? is.push(i)
+        const _ = arr[i] === val ? inds.push(i)
                                  : null;
     }
-    return is;
+    return inds;
 };
 const checkGridId = (id) => id.indexOf("grid-") !== -1;
 const idToCoords  = (gridId) => gridId.match(/\d+/g).map(Number);
 const createColor = (color, hsl) => { return {color, hsl}; };
 const checkXY = (xs, x, ys, y) => {
     const ixs = findAll(xs, x);
-    const iys = ixs.map((ix) => ys[ix]);
-    return findAll(iys, y).length > 0 ? true
+    const yys = ixs.map((ix) => ys[ix]);
+    return findAll(yys, y).length > 0 ? true
                                       : false;
 };
 
