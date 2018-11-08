@@ -1,4 +1,5 @@
 html, body {
+    font-family: Verdana, Geneva, sans-serif;
     padding: 0;
     margin: 0;
 }
@@ -7,10 +8,19 @@ html, body {
     height: 100px;
 }
 
-#figure {
+div {
     margin: auto;
+}
+
+#figure {
     height: 512px;
     width: 512px;
+    border: 5px solid #cccccc;
+}
+
+#print {
+    padding: 20px;
+    text-align: center;
 }
 
 svg {
