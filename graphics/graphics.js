@@ -5,7 +5,7 @@ const circleId    = (x, y)       => `circle-${x}-${y}`;
 const range       = (limit)      => [...Array(limit).keys()];
 const arrayToStr  = (array)      => array.map((x) => x.toString());
 const arrayToHsl  = ([h, s, l])  => `hsl(${h}, ${s}%, ${l}%)`;
-const createColor = (color, hsl) => { return {color, hsl}; };
+const createColor = (name, hsl) => { return {name, hsl}; };
 const randBetween = (min, max)   => Math.floor(random() * (max - min)) + min;
 const randomHsl   = () => {
     const h = randBetween( 0, 359);
@@ -33,12 +33,12 @@ const createSquare = (containerId, unit) => (x, y, color, id) => {
     createSvg(containerId, "rect", squareAttributes);
 };
 const createCircle = (containerId, radius) => (x, y, color, id) => {
-    const circleAttributes = [ ["id"     , id          ]
-                             , ["cx"     , x + radius  ]
-                             , ["cy"     , y + radius  ]
-                             , ["r"      , radius * 0.8]
-                             , ["fill"   , color       ]
-                             , ["opacity", 0.9         ]
+    const circleAttributes = [ ["id"     , id           ]
+                             , ["cx"     , x + radius   ]
+                             , ["cy"     , y + radius   ]
+                             , ["r"      , radius * 0.82]
+                             , ["fill"   , color        ]
+                             , ["opacity", 0.9          ]
                              ];
     createSvg(containerId, "circle", circleAttributes);
 };
