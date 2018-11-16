@@ -68,10 +68,10 @@ const deleteGrid = (containerId) => {
 helpColor();
 gridEdges(drawGrid);
 // gridEdges(randomGrid);
-window.onclick = (e) => {
+document.onmouseup = (e) => {
     const clickId = e.target.id;
     const _ = checkGridId(clickId) ? clickGrid(clickId)
                                    : null;
 };
-window.onkeydown = (e) => e.keyCode ? keyAction(e.keyCode)
+document.onkeydown = (e) => e.keyCode ? keyAction(e.keyCode)
                                     : null;
