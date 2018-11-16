@@ -29,7 +29,7 @@ const colorFun   = (x, y) => (x + y) >= len ? blue.hsl
                                             : red.hsl;
 const drawGrid   = (x, y) => gridUnit(x, y, colorFun(x, y), gridId(x, y));
 const randomGrid = (x, y) => changeColor(randomHsl(), gridId(x, y));
-const textColor = (id, color) => {
+const textColor  = (id, color) => {
     document.getElementById(id).style.color = color;
 };
 const gridUnit   = createSquare(containerId, unit);

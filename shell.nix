@@ -1,7 +1,7 @@
 { pkgs ? import <nixpkgs> {} }:
 
 with pkgs; mkShell {
-    name = "jshint";
+    name = "javascript";
 
     buildInputs = [ htmlTidy
                     nodejs-8_x
