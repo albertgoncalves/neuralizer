@@ -5,7 +5,7 @@ const circleId    = (x, y)       => `circle-${x}-${y}`;
 const range       = (limit)      => [...Array(limit).keys()];
 const arrayToStr  = (array)      => array.map((x) => x.toString());
 const arrayToHsl  = ([h, s, l])  => `hsl(${h}, ${s}%, ${l}%)`;
-const createColor = (name, hsl)  => ({name, hsl})
+const createColor = (name, hsl)  => ({name, hsl});
 const randBetween = (min, max)   => Math.floor(random() * (max - min)) + min;
 const randomHsl   = () => {
     const h = randBetween( 0, 359);
