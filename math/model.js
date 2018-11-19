@@ -45,9 +45,9 @@ const forRange = (min, max) => {
 const labelMap = () => ({"red": 1, "blue": 0});
 const params = () => {
     const nHiddenDim = 5;
-    const regLambda  = 0.01;
-    const epsilon    = 0.01;
-    const nLoops     = 250;
+    const regLambda  = 0.02;
+    const epsilon    = 0.02;
+    const nLoops     = 100;
     return {nHiddenDim, regLambda, epsilon, nLoops};
 };
 

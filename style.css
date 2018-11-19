@@ -9,6 +9,7 @@ html, body {
 }
 
 div {
+    text-align: center;
     margin: auto;
 }
 
@@ -19,7 +20,6 @@ div {
 }
 
 #help {
-    text-align: center;
     color: gray;
     padding: 10px;
 }
