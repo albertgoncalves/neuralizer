@@ -1,11 +1,14 @@
 *
+!math
+!graphics
 !.gitignore
 !*.md
 !*.nix
 !*.sh
 !js
 !*.js
-!graphics
 !.jshintrc
 !*.html
 !*.css
+!py
+!*.py
