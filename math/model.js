@@ -34,7 +34,7 @@ const indexOfMax = (array) => {
     }
 
     return maxIndex;
-}
+};
 const forRange = (min, max) => {
     const z = [];
     for (let i = min; i < max; i++) z.push(i);
@@ -53,7 +53,7 @@ const params = () => {
 
 /* training functions */
 const initModel = (nInputDim, nOutputDim, nHiddenDim) => {
-    const rand2d = gen2dArray(() => 2 * Math.random() - 1)
+    const rand2d = gen2dArray(() => 2 * Math.random() - 1);
     const w1 = matIterF(
         (x) => x / Math.sqrt(nInputDim ))(rand2d(nInputDim , nHiddenDim)
     );
@@ -72,15 +72,15 @@ const fwdProp = (model, X) => {
     const a1        = matIterF((x) => Math.tanh(x))(z1);
     const z2        = dot(a1, w2).map((x) => addF(vecIterF)(x, b2[0]));
     const expScr    = matIterF((x) => Math.exp(x))(z2);
-    const sumExpScr = expScr.map(sumVec)
+    const sumExpScr = expScr.map(sumVec);
     const p         = divF(matToVecF)(expScr, sumExpScr);
 
     return {p, a1};
-}
+};
 
 const backProp = (model, X, Y, p, a1, regLambda, epsilon) => {
     const apply = (xs, c, d) => {
-        return addF(matElemF)(xs, matIterF((x) => x * c)(d))
+        return addF(matElemF)(xs, matIterF((x) => x * c)(d));
     };
 
     let {w1, w2, b1, b2} = model;
@@ -90,16 +90,16 @@ const backProp = (model, X, Y, p, a1, regLambda, epsilon) => {
     const db2    = [transpose(delta3).map(sumVec)];
     const delta2 = mulF(matElemF)( dot(delta3, transpose(w2))
                                  , matIterF((x) => (1 - Math.pow(x, 2)))(a1)
-                                 )
+                                 );
     let   dw1    = dot(transpose(X), delta2);
     const db1    = [transpose(delta2).map(sumVec)];
 
-    dw2 = apply(dw2, regLambda, w2)
-    dw1 = apply(dw1, regLambda, w1)
-    w1  = apply(w1, -epsilon, dw1)
-    w2  = apply(w2, -epsilon, dw2)
-    b1  = apply(b1, -epsilon, db1)
-    b2  = apply(b2, -epsilon, db2)
+    dw2 = apply(dw2, regLambda, w2);
+    dw1 = apply(dw1, regLambda, w1);
+    w1  = apply(w1, -epsilon, dw1);
+    w2  = apply(w2, -epsilon, dw2);
+    b1  = apply(b1, -epsilon, db1);
+    b2  = apply(b2, -epsilon, db2);
     return {w1, w2, b1, b2};
 };
 
@@ -160,7 +160,7 @@ const testAxis = (xEdges, yEdges) => (Xs, Ys, labels) => {
     const {xs, ys} = edgePermute(xEdges, yEdges);
 
     const test = conditionTest(XsNorm, YsNorm)(xs, ys);
-    const pred = predict(model, test)
+    const pred = predict(model, test);
 
     return transpose([xs, ys, pred]);
 };

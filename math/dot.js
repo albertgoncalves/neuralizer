@@ -31,9 +31,9 @@ const matToVecF = (f) => (xs, y) => {
 
 const vecIterF = (f) => (x, y) => {
     const z = [];
-    for (let i = 0; i < x.length; i++) z.push(f(x[i], y[i]))
+    for (let i = 0; i < x.length; i++) z.push(f(x[i], y[i]));
     return z;
-}
+};
 
 const vecElemSumF = (f) => (x, y) => {
     let sum = 0;

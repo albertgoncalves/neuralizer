@@ -8,4 +8,4 @@ const main = () => {
     console.log(addF(matElemF)(ys, xsT));
 };
 
-main()
+main();
