@@ -1,6 +1,7 @@
 /* training functions */
 const initModel = (nInputDim, nOutputDim, nHiddenDim) => {
     const rand2d = gen2dArray(() => 2 * Math.random() - 1);
+
     const w1 = matIterF(
         (x) => x / Math.sqrt(nInputDim ))(rand2d(nInputDim , nHiddenDim)
     );
@@ -9,6 +10,7 @@ const initModel = (nInputDim, nOutputDim, nHiddenDim) => {
     );
     const b1 = gen2dArray(() => 0)(1, nHiddenDim);
     const b2 = gen2dArray(() => 0)(1, nOutputDim);
+
     return {w1, w2, b1, b2};
 };
 
@@ -71,15 +73,15 @@ const autoModel = (params) => (Xs, Ys, labels, labelMap) => {
     const XsNorm = normalize(Xs);
     const YsNorm = normalize(Ys);
 
-    const X = zip(XsNorm.units, YsNorm.units);
-    const Y = labels.map((x) => labelMap[x]);
+    const trainX = zip(XsNorm.units, YsNorm.units);
+    const trainY = labels.map((y) => labelMap[y]);
     const nInputDim  = [xs, ys].length;
     const nOutputDim = [...new Set(labels)].length;
 
     const model = train( initModel(nInputDim, nOutputDim, nHiddenDim)
                        , nLoops
-                       , X
-                       , Y
+                       , trainX
+                       , trainY
                        , regLambda
                        , epsilon
                        );
