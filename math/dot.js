@@ -1,4 +1,3 @@
-/* pure functions */
 const addF = (f) => f((a, b) => a + b);
 const subF = (f) => f((a, b) => a - b);
 const mulF = (f) => f((a, b) => a * b);

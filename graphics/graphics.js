@@ -2,17 +2,7 @@
 const random      = ()           => Math.random();
 const gridId      = (x, y)       => `grid-${x}-${y}`;
 const circleId    = (x, y)       => `circle-${x}-${y}`;
-const range       = (limit)      => [...Array(limit).keys()];
-const arrayToStr  = (array)      => array.map((x) => x.toString());
-const arrayToHsl  = ([h, s, l])  => `hsl(${h}, ${s}%, ${l}%)`;
 const createColor = (name, hsl)  => ({name, hsl});
-const randBetween = (min, max)   => Math.floor(random() * (max - min)) + min;
-const randomHsl   = () => {
-    const h = randBetween( 0, 359);
-    const s = randBetween(50, 100);
-    const l = randBetween(40,  80);
-    return arrayToHsl(arrayToStr([h, s, l]));
-};
 
 /* side-effects */
 const createSvg = (containerId, svgShape, attributes) => {

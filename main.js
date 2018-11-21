@@ -15,14 +15,17 @@ const predEdges   = edgePermute(edges, edges);
 const xs          = [];
 const ys          = [];
 const labels      = [];
-let colorState    = [red, blue];
 
-const labelMap    = ({"red": 1, "blue": 0});
 const nHiddenDim  = 5;
 const regLambda   = 0.02;
 const epsilon     = 0.02;
 const nLoops      = 100;
 const params      = ({nHiddenDim, regLambda, epsilon, nLoops});
+
+let colorState     = [red, blue];
+const labelMap     = ({"red": 1, "blue": 0});
+const predColorMap = (binary) => binary === labelMap.blue ? blue
+                                                          : red;
 
 /* side-effects */
 const helpColor  = () => {
@@ -49,9 +52,6 @@ const clickGrid  = (gridId) => {
                                  : null;
 };
 
-const predColorMap = (binary) => binary === 0 ? blue
-                                              : red;
-
 const applyPred = (predCells) => {
     predCells.forEach(([x, y, colorVal]) => {
         const color = predColorMap(colorVal);
@@ -60,6 +60,8 @@ const applyPred = (predCells) => {
 };
 
 const keyAction = (key) => {
+    const colorKey = keys.hasOwnProperty(key);
+
     const colorSwitch = (key) => {
         const flipColors = () => {
             colorState = colorState.reverse();
@@ -70,15 +72,13 @@ const keyAction = (key) => {
                                              : null;
     };
 
-    const _ = keys.hasOwnProperty(key)
-        ? colorSwitch(key)
-        : key === keyN
-            ? applyPred(
-                predAxis(predEdges)(xs, ys, labels, labelMap)(params)
-            )
-            : key === keyY
-                ? location.reload()
-                : null;
+    const predExpr = () =>
+        applyPred(predAxis(predEdges)(xs, ys, labels, labelMap)(params));
+
+    const _ = colorKey ? colorSwitch(key)
+                       : key === keyN ? predExpr()
+                                      : key === keyY ? location.reload()
+                                                     : null;
 };
 
 const deleteGrid = (containerId) => {
