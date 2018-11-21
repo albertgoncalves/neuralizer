@@ -21,6 +21,7 @@ const createSvg = (containerId, svgShape, attributes) => {
     attributes.forEach(([prop, value]) => newSvg.setAttribute(prop, value));
     document.getElementById(containerId).appendChild(newSvg);
 };
+
 const createSquare = (containerId, unit) => (x, y, color, id) => {
     const squareAttributes = [ ["id"     , id   ]
                              , ["x"      , x    ]
@@ -32,6 +33,7 @@ const createSquare = (containerId, unit) => (x, y, color, id) => {
                              ];
     createSvg(containerId, "rect", squareAttributes);
 };
+
 const createCircle = (containerId, radius) => (x, y, color, id) => {
     const circleAttributes = [ ["id"     , id           ]
                              , ["cx"     , x + radius   ]
@@ -42,6 +44,7 @@ const createCircle = (containerId, radius) => (x, y, color, id) => {
                              ];
     createSvg(containerId, "circle", circleAttributes);
 };
+
 const changeColor = (color, id) => {
     document.getElementById(id).style.fill = color;
 };

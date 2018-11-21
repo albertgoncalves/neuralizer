@@ -6,6 +6,7 @@ with pkgs; mkShell {
     buildInputs = [ htmlTidy
                     nodejs-8_x
                     fzf
+                    tmux
                   ];
 
     shellHook = ''

@@ -14,8 +14,3 @@ const findAll = (arr, val) => {
     }
     return inds;
 };
-
-/* side-effects */
-const iterGrid = (xs, ys) => (f) => {
-    xs.forEach((x) => ys.forEach((y) => f(x, y)));
-};
