@@ -21,7 +21,7 @@ for (let color of colorState) predColorMap[labelMap[color.name]] = color.hsl;
 const xs     = [];
 const ys     = [];
 const labels = [];
-const params = { nHiddenDim: 10
+const params = { nHiddenDim: 4
                , regLambda : 0.05
                , epsilon   : 0.05
                , nLoops    : 100
