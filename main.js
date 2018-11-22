@@ -21,18 +21,17 @@ for (let color of colorState) predColorMap[labelMap[color.name]] = color.hsl;
 const xs     = [];
 const ys     = [];
 const labels = [];
-const params = { nHiddenDim: 5
-               , regLambda : 0.02
-               , epsilon   : 0.02
+const params = { nHiddenDim: 10
+               , regLambda : 0.05
+               , epsilon   : 0.05
                , nLoops    : 100
                };
 
 /* side-effects */
 const gridUnit   = createSquare(containerId, unit);
 const circleUnit = createCircle(containerId, halfUnit);
-const textColor  = (id, color) => {
+const textColor  = (id, color) =>
     document.getElementById(id).style.color = color;
-};
 
 const helpColor = () => {
     textColor(colorState[0].name, colorState[0].hsl);

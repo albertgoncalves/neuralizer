@@ -14,13 +14,6 @@ def fwd_prop(model, X):
     w1, w2, b1, b2 = model
     z1      = np.dot(X, w1) + b1
     a1      = np.tanh(z1)
-    # print(w1)
-    # print('')
-    # print(a1)
-    # print('')
-    # print(b1)
-    # print('')
-    # print('')
     z2      = np.dot(a1, w2) + b2
     exp_scr = np.exp(z2)
     p       = exp_scr / np.sum(exp_scr, axis=1, keepdims=True)
@@ -96,7 +89,7 @@ def main():
     model = init_model(n_input_dim, n_output_dim, n_hidden_dim)
     model = train_model(model, n_loops, X, Y, reg_lambda, epsilon)
     pred  = predict(model, x)
-    # print(eval_model(pred, y))
+    print(eval_model(pred, y))
 
 if __name__ == "__main__":
     main()

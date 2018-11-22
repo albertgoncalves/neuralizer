@@ -3,7 +3,7 @@ const gen2dArray = (f)    => (nx, ny) => arrayGen(nx, () => arrayGen(ny, f));
 const zipWith    = (f)    => (a, b) => a.map((e, i) => f(e, b[i]));
 const argMax     = (xs)   => xs.map(indexOfMax);
 
-const fIndex1    = (f)    => (x, index) => {
+const fIndex1 = (f) => (x, index) => {
     const z = [];
     for (let i = 0; i < x.length; i++) z.push(i === index ? f(x[i])
                                                           : x[i]);
