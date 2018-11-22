@@ -1,7 +1,7 @@
-const addF = (f) => f((a, b) => a + b);
-const subF = (f) => f((a, b) => a - b);
-const mulF = (f) => f((a, b) => a * b);
-const divF = (f) => f((a, b) => a / b);
+const addF = (a, b) => (a + b);
+const subF = (a, b) => (a - b);
+const mulF = (a, b) => (a * b);
+const divF = (a, b) => (a / b);
 
 const transpose = (xs) => {
     const ys = [];
@@ -47,7 +47,7 @@ const dot = (xs, ys) => {
     for (let ix = 0; ix < xs.length; ix++) {
         const z = [];
         for (let iy = 0; iy < ysT.length; iy++) {
-            z.push(mulF(vecElemSumF)(xs[ix], ysT[iy]));
+            z.push(vecElemSumF(mulF)(xs[ix], ysT[iy]));
         }
         zs.push(z);
     }

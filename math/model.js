@@ -17,19 +17,19 @@ const initModel = (nInputDim, nOutputDim, nHiddenDim) => {
 const fwdProp = (model, trainX) => {
     const {w1, w2, b1, b2} = model;
 
-    const z1        = dot(trainX, w1).map((x) => addF(vecIterF)(x, b1[0]));
+    const z1        = dot(trainX, w1).map((x) => vecIterF(addF)(x, b1[0]));
     const a1        = matIterF((x) => Math.tanh(x))(z1);
-    const z2        = dot(a1, w2).map((x) => addF(vecIterF)(x, b2[0]));
+    const z2        = dot(a1, w2).map((x) => vecIterF(addF)(x, b2[0]));
     const expScr    = matIterF((x) => Math.exp(x))(z2);
     const sumExpScr = expScr.map(sumVec);
-    const p         = divF(matToVecF)(expScr, sumExpScr);
+    const p         = matToVecF(divF)(expScr, sumExpScr);
 
     return {p, a1};
 };
 
 const backProp = (model, trainX, trainY, p, a1, regLambda, epsilon) => {
     const apply = (xs, c, d) => {
-        return addF(matElemF)(xs, matIterF((x) => x * c)(d));
+        return matElemF(addF)(xs, matIterF((x) => x * c)(d));
     };
 
     let {w1, w2, b1, b2} = model;
@@ -37,7 +37,7 @@ const backProp = (model, trainX, trainY, p, a1, regLambda, epsilon) => {
     const delta3 = zipWith(fIndex1((x) => x - 1))(p, trainY);
     let   dw2    = dot(transpose(a1), delta3);
     const db2    = [transpose(delta3).map(sumVec)];
-    const delta2 = mulF(matElemF)( dot(delta3, transpose(w2))
+    const delta2 = matElemF(mulF)(dot(delta3, transpose(w2))
                                  , matIterF((x) => (1 - Math.pow(x, 2)))(a1)
                                  );
     let   dw1    = dot(transpose(trainX), delta2);
