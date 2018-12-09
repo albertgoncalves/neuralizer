@@ -3,10 +3,10 @@
 with pkgs; mkShell {
     name = "python";
 
-    buildInputs = [ python3
-                    python3Packages.numpy
-                    python3Packages.sklearn-deap
-                    python3Packages.pylint
+    buildInputs = [ python36
+                    python36Packages.numpy
+                    python36Packages.sklearn-deap
+                    python36Packages.pylint
                     fzf
                   ];
 
