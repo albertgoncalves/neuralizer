@@ -31,9 +31,8 @@ const backProp = (model, trainX, trainY, p, a1, regLambda, epsilon) => {
     const delta3 = zipWith(fIndex1((x) => x - 1))(p, trainY);
     let dw2 = dot(transpose(a1), delta3);
     const db2 = [transpose(delta3).map(sumVec)];
-    const delta2 = matElemF(mulF)(dot(delta3, transpose(w2))
-                                 , matIterF((x) => (1 - Math.pow(x, 2)))(a1)
-                                 );
+    const mat_a1 = matIterF((x) => (1 - Math.pow(x, 2)))(a1);
+    const delta2 = matElemF(mulF)(dot(delta3, transpose(w2)), mat_a1);
     let dw1 = dot(transpose(trainX), delta2);
     const db1 = [transpose(delta2).map(sumVec)];
 

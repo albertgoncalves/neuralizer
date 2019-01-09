@@ -8,18 +8,25 @@ const argMax = (xs) => xs.map(indexOfMax);
 
 const fIndex1 = (f) => (x, index) => {
     const z = [];
-    for (let i = 0; i < x.length; i++) z.push(i === index ? f(x[i]) : x[i]);
+
+    for (let i = 0; i < x.length; i++)
+        z.push(i === index ? f(x[i]) : x[i]);
+
     return z;
 };
 
 const arrayGen = (n, f) => {
     const z = [];
-    for (let i = 0; i < n; i++) z.push(f());
+
+    for (let i = 0; i < n; i++)
+        z.push(f());
+
     return z;
 };
 
 const indexOfMax = (array) => {
-    if (array.length === 0) return -1;
+    if (array.length === 0)
+        return -1;
 
     let maxIndex = 0;
     let max = array[maxIndex];
@@ -36,6 +43,9 @@ const indexOfMax = (array) => {
 
 const forRange = (min, max) => {
     const z = [];
-    for (let i = min; i < max; i++) z.push(i);
+
+    for (let i = min; i < max; i++)
+        z.push(i);
+
     return z;
 };

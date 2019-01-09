@@ -4,9 +4,11 @@ const idToCoords = (gridId) => gridId.match(/\d+/g).map(Number);
 
 const findAll = (arr, val) => {
     const inds = [];
+
     for (i = 0; i < arr.length; i++) {
         const _ = arr[i] === val ? inds.push(i) : null;
     }
+
     return inds;
 };
 
