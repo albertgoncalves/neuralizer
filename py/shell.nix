@@ -6,14 +6,13 @@ with pkgs; mkShell {
     buildInputs = [ python36
                     python36Packages.numpy
                     python36Packages.sklearn-deap
-                    python36Packages.pylint
+                    python36Packages.flake8
                     fzf
                   ];
 
     shellHook = ''
         copyfile() { cat $1 | pbcopy; }
-        pylin()    { pylint -s n $1; }
-        strcd()    { cd "$(dirname $1)"; }
+        strcd() { cd "$(dirname $1)"; }
         withfzf() {
             local h
             h=$(fzf)
@@ -23,13 +22,12 @@ with pkgs; mkShell {
         }
 
         alias cpyfzf="withfzf copyfile"
-        alias  cdfzf="withfzf strcd"
-        alias pylfzf="withfzf pylin"
+        alias cdfzf="withfzf strcd"
         alias runfzf="withfzf python3"
         alias vimfzf="withfzf vim"
+        alias flake8="flake8 --ignore E124,E128,E201,E203,E241,W503"
 
         export -f copyfile
-        export -f pylin
         export -f withfzf
     '';
 }

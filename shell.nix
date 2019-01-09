@@ -16,8 +16,8 @@ with pkgs; mkShell {
 
         export PATH="$PWD/node_modules/.bin/:$PATH"
 
-        fzfh()    { find . | fzf; }
-        strcd()   { cd "$(dirname $1)"; }
+        fzfh() { find . | fzf; }
+        strcd() { cd "$(dirname $1)"; }
         withfzf() {
             local h
             h="$(fzf --exact)"
@@ -26,7 +26,7 @@ with pkgs; mkShell {
             fi
         }
 
-        alias  cdfzf="withfzf strcd"
+        alias cdfzf="withfzf strcd"
         alias jshfzf="withfzf jshint"
         alias runfzf="withfzf node"
         alias tidfzf="withfzf tidy"

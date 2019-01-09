@@ -1,12 +1,14 @@
-const zip        = (a, b) => a.map((e, i) => [e, b[i]]);
-const gen2dArray = (f)    => (nx, ny) => arrayGen(nx, () => arrayGen(ny, f));
-const zipWith    = (f)    => (a, b) => a.map((e, i) => f(e, b[i]));
-const argMax     = (xs)   => xs.map(indexOfMax);
+const zip = (a, b) => a.map((e, i) => [e, b[i]]);
+
+const gen2dArray = (f) => (nx, ny) => arrayGen(nx, () => arrayGen(ny, f));
+
+const zipWith = (f) => (a, b) => a.map((e, i) => f(e, b[i]));
+
+const argMax = (xs) => xs.map(indexOfMax);
 
 const fIndex1 = (f) => (x, index) => {
     const z = [];
-    for (let i = 0; i < x.length; i++) z.push(i === index ? f(x[i])
-                                                          : x[i]);
+    for (let i = 0; i < x.length; i++) z.push(i === index ? f(x[i]) : x[i]);
     return z;
 };
 
@@ -20,12 +22,12 @@ const indexOfMax = (array) => {
     if (array.length === 0) return -1;
 
     let maxIndex = 0;
-    let max      = array[maxIndex];
+    let max = array[maxIndex];
 
     for (let i = 1; i < array.length; i++) {
         if (array[i] > max) {
             maxIndex = i;
-            max      = array[i];
+            max = array[i];
         }
     }
 

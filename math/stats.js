@@ -5,14 +5,13 @@ const mean = (array) => {
 };
 
 const sqDiff = (array, mu) => array.map((x) => Math.pow(x - mu, 2));
-const std    = (array, mu) => Math.sqrt(mean(sqDiff(array, mu)));
 
-const condition = (xs, mu, sigma) => {
-    return xs.map((x) => (x - mu) / sigma);
-};
+const std = (array, mu) => Math.sqrt(mean(sqDiff(array, mu)));
+
+const condition = (xs, mu, sigma) => xs.map((x) => (x - mu) / sigma);
 
 const normalize = (xs) => {
-    const mu    = mean(xs);
+    const mu = mean(xs);
     const sigma = std(xs, mu);
     const units = condition(xs, mu, sigma);
     return {units, mu, sigma};
