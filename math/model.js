@@ -72,13 +72,8 @@ const autoModel = (params) => (Xs, Ys, labels, labelMap) => {
     const nInputDim = [xs, ys].length;
     const nOutputDim = [...new Set(labels)].length;
 
-    const model = train( initModel(nInputDim, nOutputDim, nHiddenDim)
-                       , nLoops
-                       , trainX
-                       , trainY
-                       , regLambda
-                       , epsilon
-                       );
+    const start = initModel(nInputDim, nOutputDim, nHiddenDim);
+    const model = train(start, nLoops, trainX, trainY, regLambda, epsilon);
 
     return {model, XsNorm, YsNorm};
 };

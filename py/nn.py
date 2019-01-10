@@ -78,15 +78,16 @@ def eval_model(pred, y):
 def main():
     np.random.seed(0)
 
-    args = { "n_samples": 7
-           , "n_features": 2
-           , "n_informative": 2
-           , "n_redundant": 0
-           , "n_repeated": 0
-           , "n_classes": 2
-           , "n_clusters_per_class": 2
-           , "random_state": 0
-           }
+    args = \
+        { "n_samples": 7
+        , "n_features": 2
+        , "n_informative": 2
+        , "n_redundant": 0
+        , "n_repeated": 0
+        , "n_classes": 2
+        , "n_clusters_per_class": 2
+        , "random_state": 0
+        }
     data = sklearn.datasets.make_classification(**args)
     X, Y, x, y = split_data(data, 4)
 

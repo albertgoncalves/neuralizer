@@ -17,8 +17,9 @@ let colorState = [red, blue];
 const labelMap = {"red" : 0, "blue": 1};
 const predColorMap = {};
 
-for (let color of colorState)
+for (let color of colorState) {
     predColorMap[labelMap[color.name]] = color.hsl;
+}
 
 /* model params */
 const xs = [];
@@ -29,8 +30,9 @@ const params = {nHiddenDim: 4, regLambda: 0.05, epsilon: 0.05, nLoops: 100};
 /* side-effects */
 const gridUnit = createSquare(containerId, unit);
 const circleUnit = createCircle(containerId, halfUnit);
-const textColor = (id, color) =>
+const textColor = (id, color) => {
     document.getElementById(id).style.color = color;
+};
 
 const helpColor = () => {
     textColor(colorState[0].name, colorState[0].hsl);
@@ -49,8 +51,9 @@ const clickGrid = (gridId) => {
 };
 
 const applyPred = (predCells) => {
-    const apply = ([x, y, colorVal]) =>
+    const apply = ([x, y, colorVal]) => {
         changeColor(predColorMap[colorVal], gridId(x, y));
+    };
 
     predCells.forEach(apply);
 };
@@ -68,8 +71,9 @@ const keyAction = (key) => {
         const _ = colorObj !== colorState[0] ? flipColors() : null;
     };
 
-    const predExpr = () =>
+    const predExpr = () => {
         applyPred(predAxis(predEdges)(xs, ys, labels, labelMap)(params));
+    };
 
     const _ = colorKey ? colorSwitch(key)
         : key === keyN ? predExpr()

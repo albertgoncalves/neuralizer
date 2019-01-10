@@ -9,8 +9,9 @@ const transpose = (xs) => {
     for (let iy = 0; iy < xs[0].length; iy++) {
         const y = [];
 
-        for (let ix = 0; ix < xs.length; ix++)
+        for (let ix = 0; ix < xs.length; ix++) {
             y.push(xs[ix][iy]);
+        }
 
         ys.push(y);
     }
@@ -21,8 +22,9 @@ const transpose = (xs) => {
 const sumVec = (x) => {
     let sum = 0;
 
-    for (let i = 0; i < x.length; i++)
+    for (let i = 0; i < x.length; i++) {
         sum += x[i];
+    }
 
     return sum;
 };
@@ -33,8 +35,9 @@ const matToVecF = (f) => (xs, y) => {
     for (let i = 0; i < xs.length; i++) {
         const z = [];
 
-        for (let j = 0; j < xs[i].length; j++)
+        for (let j = 0; j < xs[i].length; j++) {
             z.push(f(xs[i][j], y[i]));
+        }
 
         zs.push(z);
     }
@@ -45,8 +48,9 @@ const matToVecF = (f) => (xs, y) => {
 const vecIterF = (f) => (x, y) => {
     const z = [];
 
-    for (let i = 0; i < x.length; i++)
+    for (let i = 0; i < x.length; i++) {
         z.push(f(x[i], y[i]));
+    }
 
     return z;
 };
@@ -54,8 +58,9 @@ const vecIterF = (f) => (x, y) => {
 const vecElemSumF = (f) => (x, y) => {
     let sum = 0;
 
-    for (let i = 0; i < x.length; i++)
+    for (let i = 0; i < x.length; i++) {
         sum += f(x[i], y[i]);
+    }
 
     return sum;
 };
@@ -83,8 +88,9 @@ const matIterF = (f) => (xs) => {
     for (let ix = 0; ix < xs.length; ix++) {
         const z = [];
 
-        for (let iy = 0; iy < xs[0].length; iy++)
+        for (let iy = 0; iy < xs[0].length; iy++) {
             z.push(f(xs[ix][iy]));
+        }
 
         zs.push(z);
     }
