@@ -1,12 +1,10 @@
 /* training functions */
 const initModel = (nInputDim, nOutputDim, nHiddenDim) => {
     const rand2d = gen2dArray(() => 2 * Math.random() - 1);
-    const w1 = matIterF(
-        (x) => x / Math.sqrt(nInputDim ))(rand2d(nInputDim , nHiddenDim)
-    );
-    const w2 = matIterF(
-        (x) => x / Math.sqrt(nHiddenDim))(rand2d(nHiddenDim, nOutputDim)
-    );
+    const w1f = matIterF((x) => x / Math.sqrt(nInputDim));
+    const w1 = w1f(rand2d(nInputDim, nHiddenDim));
+    const w2f = matIterF((x) => x / Math.sqrt(nHiddenDim));
+    const w2 = w2f(rand2d(nHiddenDim, nOutputDim));
     const b1 = gen2dArray(() => 0)(1, nHiddenDim);
     const b2 = gen2dArray(() => 0)(1, nOutputDim);
     return {w1, w2, b1, b2};

@@ -30,6 +30,7 @@ const params = {nHiddenDim: 4, regLambda: 0.05, epsilon: 0.05, nLoops: 100};
 /* side-effects */
 const gridUnit = createSquare(containerId, unit);
 const circleUnit = createCircle(containerId, halfUnit);
+
 const textColor = (id, color) => {
     document.getElementById(id).style.color = color;
 };
@@ -46,7 +47,9 @@ const clickGrid = (gridId) => {
         labels.push(colorState[0].name);
         circleUnit(x, y, colorState[0].hsl, circleId(x, y));
     };
+
     const [x, y] = idToCoords(gridId);
+
     return checkXY(xs, x, ys, y) ? affectGrid(x, y) : null;
 };
 
