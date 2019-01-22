@@ -18,7 +18,8 @@ def fwd_prop(model, X):
     a1 = np.tanh(z1)
     z2 = np.dot(a1, w2) + b2
     exp_scr = np.exp(z2)
-    p = exp_scr / np.sum(exp_scr, axis=1, keepdims=True)
+    pp = np.sum(exp_scr, axis=1, keepdims=True)
+    p = exp_scr / pp
     return p, a1
 
 
@@ -94,7 +95,7 @@ def main():
     n_input_dim = X.shape[1]
     n_output_dim = len(np.unique(Y))
     n_hidden_dim = 3
-    n_loops = 5
+    n_loops = 10
     epsilon = 0.01
     reg_lambda = 0.01
 
