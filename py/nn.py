@@ -77,7 +77,7 @@ def eval_model(pred, y):
 
 
 def main():
-    np.random.seed(0)
+    np.random.seed(1)
 
     args = \
         { "n_samples": 30
@@ -90,7 +90,6 @@ def main():
         , "random_state": 0
         }
     data = sklearn.datasets.make_classification(**args)
-    print(data)
     X, Y, x, y = split_data(data, 4)
 
     n_input_dim = X.shape[1]
