@@ -80,7 +80,7 @@ def main():
     np.random.seed(0)
 
     args = \
-        { "n_samples": 7
+        { "n_samples": 30
         , "n_features": 2
         , "n_informative": 2
         , "n_redundant": 0
@@ -90,6 +90,7 @@ def main():
         , "random_state": 0
         }
     data = sklearn.datasets.make_classification(**args)
+    print(data)
     X, Y, x, y = split_data(data, 4)
 
     n_input_dim = X.shape[1]
