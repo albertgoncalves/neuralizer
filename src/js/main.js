@@ -16,7 +16,9 @@ function affectGrid(x, y) {
 
 function clickGrid(gridId) {
     var xy = gridId.match(/\d+/g).map(Number);
-    return checkXY(xs, xy[0], ys, xy[1]) ? affectGrid(xy[0], xy[1]) : null;
+    if (checkXY(xs, xy[0], ys, xy[1])) {
+        affectGrid(xy[0], xy[1]);
+    }
 }
 
 function applyf(xyz) {
@@ -35,7 +37,9 @@ function flipColors() {
 
 function colorSwitch(key) {
     var colorObj = keys[key];
-    var _ = colorObj !== colorState[0] ? flipColors() : null;
+    if (colorObj !== colorState[0]) {
+        flipColors();
+    }
 }
 
 function predExpr() {
