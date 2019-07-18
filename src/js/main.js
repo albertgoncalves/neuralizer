@@ -10,7 +10,10 @@ var WHITE = {
     "name": "white",
     "hsl": "hsl(0, 100%, 100%)",
 };
-var KEYS = {66: BLUE, 82: RED};
+var KEYS = {
+    66: BLUE,
+    82: RED,
+};
 var KEYY = 76;
 var KEYN = 78;
 var RES = Math.pow(2, 5);
