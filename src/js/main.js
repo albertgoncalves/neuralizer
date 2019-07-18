@@ -1,7 +1,16 @@
 /* graphics params */
-const blue = createColor("blue", "hsl(205, 85%, 65%)");
-const red = createColor("red", "hsl(5, 95%, 75%)");
-const white = createColor("white", "hsl(0, 100%, 100%)");
+var blue = {
+    "name": "blue",
+    "hsl": "hsl(205, 85%, 65%)",
+};
+var red = {
+    "name": "red",
+    "hsl": "hsl(5, 95%, 75%)",
+};
+var white = {
+    "name": "white",
+    "hsl": "hsl(0, 100%, 100%)",
+};
 const keys = {66: blue, 82: red};
 const keyY = 76;
 const keyN = 78;
@@ -45,17 +54,18 @@ const clickGrid = (gridId) => {
         xs.push(x);
         ys.push(y);
         labels.push(colorState[0].name);
-        circleUnit(x, y, colorState[0].hsl, circleId(x, y));
+        circleUnit(x, y, colorState[0].hsl, "circle-" + x + "-" + y);
     };
 
-    const [x, y] = idToCoords(gridId);
+    const [x, y] = gridId.match(/\d+/g).map(Number);
 
     return checkXY(xs, x, ys, y) ? affectGrid(x, y) : null;
 };
 
 const applyPred = (predCells) => {
     const apply = ([x, y, colorVal]) => {
-        changeColor(predColorMap[colorVal], gridId(x, y));
+        document.getElementById(gridId(x, y)).style.fill =
+            predColorMap[colorVal];
     };
 
     predCells.forEach(apply);

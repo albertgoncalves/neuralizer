@@ -4,17 +4,6 @@ function gridId(x, y) {
     return "grid-" + x + "-" + y;
 }
 
-function circleId(x, y) {
-    return "circle-" + x + "-" + y;
-}
-
-function createColor(name, hsl) {
-    return {
-        name: name,
-        hsl: hsl,
-    };
-}
-
 function createSvg(containerId, svgShape, attributes) {
     var newSvg = document.createElementNS(W3, svgShape);
     attributes.forEach(function(x) {
@@ -52,16 +41,8 @@ function createCircle(containerId, radius) {
     };
 }
 
-function changeColor(color, id) {
-    document.getElementById(id).style.fill = color;
-}
-
 function checkGridId(id) {
     return id.indexOf("grid-") !== -1;
-}
-
-function idToCoords(gridId) {
-    return gridId.match(/\d+/g).map(Number);
 }
 
 function findAll(arr, val) {
