@@ -79,7 +79,7 @@ const keyAction = (key) => {
     };
 
     const _ = colorKey ? colorSwitch(key)
-        : key === keyN ? predExpr()
+        : (key === keyN) && (xs.length > 0) ? predExpr()
         : key === keyY ? location.reload()
         : null;
 };
