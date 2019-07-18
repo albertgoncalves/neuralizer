@@ -13,32 +13,34 @@ var WHITE = {
 var KEYS = {66: BLUE, 82: RED};
 var KEYY = 76;
 var KEYN = 78;
-var CONTAINERID = "axis";
 var RES = Math.pow(2, 5);
+var CONTAINERID = "axis";
 var UNIT = document.getElementById("figure").clientWidth / RES;
+var GRIDUNIT = createSquare(CONTAINERID, UNIT);
+var CIRCLEUNIT = createCircle(CONTAINERID, UNIT / 2);
 var EDGES = new Array(RES);
 for (var i = 0; i < RES; i++) {
     EDGES[i] = i * UNIT;
 }
 var PREDEDGES = edgePermute(EDGES, EDGES);
 var COLORSTATE = [RED, BLUE];
-var LABELMAP = {"red": 0, "blue": 1};
+var LABELMAP = {
+    "red": 0,
+    "blue": 1,
+};
 var PREDCOLORMAP = {};
-var NC = COLORSTATE.length;
-for (var i = 0; i < NC; i++) {
+for (var i = 0; i < 2; i++) {
     PREDCOLORMAP[LABELMAP[COLORSTATE[i].name]] = COLORSTATE[i].hsl;
 }
-var XS = [];
-var YS = [];
-var LABELS = [];
 var PARAMS = {
     nHiddenDim: 4,
     regLambda: 0.05,
     epsilon: 0.05,
     nLoops: 100,
 };
-var GRIDUNIT = createSquare(CONTAINERID, UNIT);
-var CIRCLEUNIT = createCircle(CONTAINERID, UNIT / 2);
+var LABELS = [];
+var XS = [];
+var YS = [];
 
 function textColor(id, color) {
     document.getElementById(id).style.color = color;
