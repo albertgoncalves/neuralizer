@@ -111,12 +111,13 @@ function conditionTest(xsNorm, ysNorm) {
 function edgePermute(xEdges, yEdges) {
     var n = xEdges.length;
     var m = yEdges.length;
-    var xs = new Array(n);
-    var ys = new Array(m);
+    var xs = new Array(n * m);
+    var ys = new Array(n * m);
     for (var ix = 0; ix < n; ix++) {
         for (var iy = 0; iy < m; iy++) {
-            xs[(m * ix) + iy] = xEdges[ix];
-            ys[(m * ix) + iy] = yEdges[iy];
+            var i = (m * ix) + iy;
+            xs[i] = xEdges[ix];
+            ys[i] = yEdges[iy];
         }
     }
     return {
