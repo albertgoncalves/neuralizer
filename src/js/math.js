@@ -10,6 +10,42 @@ function divF(a, b) {
     return a / b;
 }
 
+function mean(array) {
+    var n = array.length;
+    var sum = 0;
+    for (var i = 0; i < n; i++) {
+        sum += array[i];
+    }
+    return sum / n;
+}
+
+function sqDiff(array, mu) {
+    return array.map(function(x) {
+        return Math.pow(x - mu, 2);
+    });
+}
+
+function std(array, mu) {
+    return Math.sqrt(mean(sqDiff(array, mu)));
+}
+
+function condition(xs, mu, sigma) {
+    return xs.map(function(x) {
+        return (x - mu) / sigma;
+    });
+}
+
+function normalize(xs) {
+    var mu = mean(xs);
+    var sigma = std(xs, mu);
+    var units = condition(xs, mu, sigma);
+    return {
+        units: units,
+        mu: mu,
+        sigma: sigma,
+    };
+}
+
 function transpose(xs) {
     var n = xs[0].length;
     var m = xs.length;
