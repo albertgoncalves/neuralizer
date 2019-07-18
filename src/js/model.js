@@ -82,10 +82,10 @@ function predict(model, x) {
 }
 
 function autoModel(params) {
-    return function(Xs, Ys, labels, labelMap) {
-        var XsNorm = normalize(Xs);
-        var YsNorm = normalize(Ys);
-        var trainX = zip(XsNorm.units, YsNorm.units);
+    return function(xs, ys, labels, labelMap) {
+        var xsNorm = normalize(xs);
+        var ysNorm = normalize(ys);
+        var trainX = zip(xsNorm.units, ysNorm.units);
         var trainY = labels.map(function(y) {
             return labelMap[y];
         });
@@ -95,8 +95,8 @@ function autoModel(params) {
         return {
             model: train(start, params.nLoops, trainX, trainY, params.regLambda,
                          params.epsilon),
-            XsNorm: XsNorm,
-            YsNorm: YsNorm,
+            xsNorm: xsNorm,
+            ysNorm: ysNorm,
         };
     };
 }
@@ -126,10 +126,10 @@ function edgePermute(xEdges, yEdges) {
 }
 
 function predAxis(xy) {
-    return function(Xs, Ys, labels, labelMap) {
+    return function(xs, ys, labels, labelMap) {
         return function(params) {
-            var am = autoModel(params)(Xs, Ys, labels, labelMap);
-            var test = conditionTest(am.XsNorm, am.YsNorm)(xy.xs, xy.ys);
+            var am = autoModel(params)(xs, ys, labels, labelMap);
+            var test = conditionTest(am.xsNorm, am.ysNorm)(xy.xs, xy.ys);
             var pred = predict(am.model, test);
             return transpose([xy.xs, xy.ys, pred]);
         };
