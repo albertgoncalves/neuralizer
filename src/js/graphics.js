@@ -24,7 +24,7 @@ function createSvg(containerId, svgShape, attributes) {
 }
 
 function createSquare(containerId, unit) {
-    return (function(x, y, color, id) {
+    return function(x, y, color, id) {
         var squareAttributes = [
             ["id", id],
             ["x", x],
@@ -35,11 +35,11 @@ function createSquare(containerId, unit) {
             ["opacity", 0.45],
         ];
         createSvg(containerId, "rect", squareAttributes);
-    });
+    };
 }
 
 function createCircle(containerId, radius) {
-    return (function(x, y, color, id) {
+    return function(x, y, color, id) {
         var circleAttributes = [
             ["id", id],
             ["cx", x + radius],
@@ -49,7 +49,7 @@ function createCircle(containerId, radius) {
             ["opacity", 0.9],
         ];
         createSvg(containerId, "circle", circleAttributes);
-    });
+    };
 }
 
 function changeColor(color, id) {
