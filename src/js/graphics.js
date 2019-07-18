@@ -55,3 +55,30 @@ function createCircle(containerId, radius) {
 function changeColor(color, id) {
     document.getElementById(id).style.fill = color;
 }
+
+function checkGridId(id) {
+    return id.indexOf("grid-") !== -1;
+}
+
+function idToCoords(gridId) {
+    return gridId.match(/\d+/g).map(Number);
+}
+
+function findAll(arr, val) {
+    var n = arr.length;
+    var inds = [];
+    for (i = 0; i < n; i++) {
+        if (arr[i] === val) {
+            inds.push(i);
+        }
+    }
+    return inds;
+}
+
+function checkXY(xs, x, ys, y) {
+    var ixs = findAll(xs, x);
+    var yys = ixs.map(function(ix) {
+        return ys[ix];
+    });
+    return findAll(yys, y).length === 0;
+}
