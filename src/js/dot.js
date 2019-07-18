@@ -1,115 +1,123 @@
-const addF = (a, b) => (a + b);
-const subF = (a, b) => (a - b);
-const mulF = (a, b) => (a * b);
-const divF = (a, b) => (a / b);
+function addF(a, b) {
+    return a + b;
+}
 
-const transpose = (xs) => {
-    const ys = [];
+function subF(a, b) {
+    return a - b;
+}
 
-    for (let iy = 0; iy < xs[0].length; iy++) {
-        const y = [];
+function mulF(a, b) {
+    return a * b;
+}
 
-        for (let ix = 0; ix < xs.length; ix++) {
-            y.push(xs[ix][iy]);
+function divF(a, b) {
+    return a / b;
+}
+
+function transpose(xs) {
+    var n = xs[0].length;
+    var m = xs.length;
+    var ys = new Array(n);
+    for (var iy = 0; iy < n; iy++) {
+        var y = new Array(m);
+        for (var ix = 0; ix < m; ix++) {
+            y[ix] = xs[ix][iy];
         }
-
-        ys.push(y);
+        ys[iy] = y;
     }
-
     return ys;
-};
+}
 
-const sumVec = (x) => {
-    let sum = 0;
-
-    for (let i = 0; i < x.length; i++) {
+function sumVec(x) {
+    var n = x.length;
+    var sum = 0;
+    for (var i = 0; i < n; i++) {
         sum += x[i];
     }
-
     return sum;
-};
+}
 
-const matToVecF = (f) => (xs, y) => {
-    const zs = [];
-
-    for (let i = 0; i < xs.length; i++) {
-        const z = [];
-
-        for (let j = 0; j < xs[i].length; j++) {
-            z.push(f(xs[i][j], y[i]));
+function matToVecF(f) {
+    return (function(xs, y) {
+        var n = xs.length;
+        var m = xs[0].length;
+        var zs = new Array(n);
+        for (var i = 0; i < n; i++) {
+            var z = new Array(m);
+            for (var j = 0; j < m; j++) {
+                z[j] = f(xs[i][j], y[i]);
+            }
+            zs[i] = z;
         }
+        return zs;
+    });
+}
 
-        zs.push(z);
-    }
-
-    return zs;
-};
-
-const vecIterF = (f) => (x, y) => {
-    const z = [];
-
-    for (let i = 0; i < x.length; i++) {
-        z.push(f(x[i], y[i]));
-    }
-
-    return z;
-};
-
-const vecElemSumF = (f) => (x, y) => {
-    let sum = 0;
-
-    for (let i = 0; i < x.length; i++) {
-        sum += f(x[i], y[i]);
-    }
-
-    return sum;
-};
-
-const dot = (xs, ys) => {
-    const ysT = transpose(ys);
-    const zs = [];
-
-    for (let ix = 0; ix < xs.length; ix++) {
-        const z = [];
-
-        for (let iy = 0; iy < ysT.length; iy++) {
-            z.push(vecElemSumF(mulF)(xs[ix], ysT[iy]));
+function vecIterF(f) {
+    return (function(x, y) {
+        var n = x.length;
+        var z = new Array(n);
+        for (var i = 0; i < n; i++) {
+            z[i] = f(x[i], y[i]);
         }
+        return z;
+    });
+}
 
-        zs.push(z);
-    }
-
-    return zs;
-};
-
-const matIterF = (f) => (xs) => {
-    const zs = [];
-
-    for (let ix = 0; ix < xs.length; ix++) {
-        const z = [];
-
-        for (let iy = 0; iy < xs[0].length; iy++) {
-            z.push(f(xs[ix][iy]));
+function vecElemSumF(f) {
+    return (function(x, y) {
+        var n = x.length;
+        var sum = 0;
+        for (var i = 0; i < n; i++) {
+            sum += f(x[i], y[i]);
         }
+        return sum;
+    });
+}
 
-        zs.push(z);
-    }
-
-    return zs;
-};
-
-const matElemF = (f) => (xs, ys) => {
-    const zs = [];
-
-    for (let ix = 0; ix < xs.length; ix++) {
-        const z = [];
-
-        for (let iy = 0; iy < xs[0].length; iy++) {
-            z.push(f(xs[ix][iy], ys[ix][iy]));
+function dot(xs, ys) {
+    var ysT = transpose(ys);
+    var n = xs.length;
+    var m = ysT.length;
+    var zs = new Array(n);
+    for (var ix = 0; ix < n; ix++) {
+        var z = new Array(m);
+        for (var iy = 0; iy < m; iy++) {
+            z[iy] = vecElemSumF(mulF)(xs[ix], ysT[iy]);
         }
-
-        zs.push(z);
+        zs[ix] = z;
     }
-
     return zs;
-};
+}
+
+function matIterF(f) {
+    return (function(xs) {
+        var n = xs.length;
+        var m = xs[0].length;
+        var zs = new Array(n);
+        for (var ix = 0; ix < n; ix++) {
+            var z = new Array(m);
+            for (var iy = 0; iy < m; iy++) {
+                z[iy] = f(xs[ix][iy]);
+            }
+            zs[ix] = z;
+        }
+        return zs;
+    });
+}
+
+function matElemF(f) {
+    return (function(xs, ys) {
+        var n = xs.length;
+        var m = xs[0].length;
+        var zs = new Array(n);
+        for (var ix = 0; ix < n; ix++) {
+            var z = new Array(m);
+            for (var iy = 0; iy < m; iy++) {
+                z[iy] = f(xs[ix][iy], ys[ix][iy]);
+            }
+            zs[ix] = z;
+        }
+        return zs;
+    });
+}
