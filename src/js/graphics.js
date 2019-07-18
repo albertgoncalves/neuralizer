@@ -6,9 +6,10 @@ function gridId(x, y) {
 
 function createSvg(containerId, svgShape, attributes) {
     var newSvg = document.createElementNS(W3, svgShape);
-    attributes.forEach(function(x) {
-        newSvg.setAttribute(x[0], x[1]);
-    });
+    var n = attributes.length;
+    for (var i = 0; i < n; i++) {
+        newSvg.setAttribute(attributes[i][0], attributes[i][1]);
+    }
     document.getElementById(containerId).appendChild(newSvg);
 }
 
@@ -58,8 +59,10 @@ function findAll(arr, val) {
 
 function checkXY(xs, x, ys, y) {
     var ixs = findAll(xs, x);
-    var yys = ixs.map(function(ix) {
-        return ys[ix];
-    });
+    var n = ixs.length;
+    var yys = new Array(n);
+    for (var i = 0; i < n; i++) {
+        yys[i] = ys[ixs[i]];
+    }
     return findAll(yys, y).length === 0;
 }

@@ -20,9 +20,12 @@ function mean(array) {
 }
 
 function sqDiff(array, mu) {
-    return array.map(function(x) {
-        return Math.pow(x - mu, 2);
-    });
+    var n = array.length;
+    var xs = new Array(n);
+    for (var i = 0; i < n; i++) {
+        xs[i] = Math.pow(array[i] - mu, 2);
+    }
+    return xs;
 }
 
 function std(array, mu) {
@@ -30,9 +33,12 @@ function std(array, mu) {
 }
 
 function condition(xs, mu, sigma) {
-    return xs.map(function(x) {
-        return (x - mu) / sigma;
-    });
+    var n = xs.length;
+    var ys = new Array(n);
+    for (var i = 0; i < n; i++) {
+        ys[i] = (xs[i] - mu) / sigma;
+    }
+    return ys;
 }
 
 function normalize(xs) {

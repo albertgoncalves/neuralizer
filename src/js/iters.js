@@ -1,7 +1,10 @@
 function zip(a, b) {
-    return a.map(function(e, i) {
-        return [e, b[i]];
-    });
+    var n = a.length;
+    var xs = new Array(n);
+    for (var i = 0; i < n; i++) {
+        xs[i] = [a[i], b[i]];
+    }
+    return xs;
 }
 
 function gen2dArray(f) {
@@ -14,14 +17,22 @@ function gen2dArray(f) {
 
 function zipWith(f) {
     return function(a, b) {
-        return a.map(function(e, i) {
-            return f(e, b[i]);
-        });
+        var n = a.length;
+        var xs = new Array(n);
+        for (var i = 0; i < n; i++) {
+            xs[i] = f(a[i], b[i]);
+        }
+        return xs;
     };
 }
 
 function argMax(xs) {
-    return xs.map(indexOfMax);
+    var n = xs.length;
+    var ys = new Array(n);
+    for (var i = 0; i < n; i++) {
+        ys[i] = indexOfMax(xs[i]);
+    }
+    return ys;
 }
 
 function fIndex1(f) {
