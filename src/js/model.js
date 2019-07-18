@@ -1,105 +1,136 @@
-/* training functions */
-const initModel = (nInputDim, nOutputDim, nHiddenDim) => {
-    const rand2d = gen2dArray(() => 2 * Math.random() - 1);
-    const w1f = matIterF((x) => x / Math.sqrt(nInputDim));
-    const w1 = w1f(rand2d(nInputDim, nHiddenDim));
-    const w2f = matIterF((x) => x / Math.sqrt(nHiddenDim));
-    const w2 = w2f(rand2d(nHiddenDim, nOutputDim));
-    const b1 = gen2dArray(() => 0)(1, nHiddenDim);
-    const b2 = gen2dArray(() => 0)(1, nOutputDim);
-    return {w1, w2, b1, b2};
-};
+function initModel(nInputDim, nOutputDim, nHiddenDim) {
+    var rand2d = gen2dArray(function() {
+        return 2 * Math.random() - 1;
+    });
+    var w1f = matIterF(function(x) {
+        return x / Math.sqrt(nInputDim);
+    });
+    var w2f = matIterF(function(x) {
+        return x / Math.sqrt(nHiddenDim);
+    });
+    return {
+        w1: w1f(rand2d(nInputDim, nHiddenDim)),
+        w2: w2f(rand2d(nHiddenDim, nOutputDim)),
+        b1: gen2dArray(function() {
+            return 0;
+        })(1, nHiddenDim),
+        b2: gen2dArray(function() {
+            return 0;
+        })(1, nOutputDim),
+    };
+}
 
-const fwdProp = (model, trainX) => {
-    const {w1, w2, b1, b2} = model;
-    const z1 = dot(trainX, w1).map((x) => vecIterF(addF)(x, b1[0]));
-    const a1 = matIterF((x) => Math.tanh(x))(z1);
-    const z2 = dot(a1, w2).map((x) => vecIterF(addF)(x, b2[0]));
-    const expScr = matIterF((x) => Math.exp(x))(z2);
-    const sumExpScr = expScr.map(sumVec);
-    const p = matToVecF(divF)(expScr, sumExpScr);
-    return {p, a1};
-};
+function fwdProp(model, trainX) {
+    var z1 = dot(trainX, model.w1).map(function(x) {
+        return vecIterF(addF)(x, model.b1[0]);
+    });
+    var a1 = matIterF(function(x) {
+        return Math.tanh(x);
+    })(z1);
+    var z2 = dot(a1, model.w2).map(function(x) {
+        return vecIterF(addF)(x, model.b2[0]);
+    });
+    var expScr = matIterF(function(x) {
+        return Math.exp(x);
+    })(z2);
+    var sumExpScr = expScr.map(sumVec);
+    return {
+        p: matToVecF(divF)(expScr, sumExpScr),
+        a1: a1,
+    };
+}
 
-const backProp = (model, trainX, trainY, p, a1, regLambda, epsilon) => {
-    const apply = (xs, c, d) => matElemF(addF)(xs, matIterF((x) => x * c)(d));
+function apply(xs, c, d) {
+    return matElemF(addF)(xs, matIterF(function(x) {
+                              return x * c;
+                          })(d));
+}
 
-    let {w1, w2, b1, b2} = model;
-
-    const delta3 = zipWith(fIndex1((x) => x - 1))(p, trainY);
-    let dw2 = dot(transpose(a1), delta3);
-    const db2 = [transpose(delta3).map(sumVec)];
-    const mat_a1 = matIterF((x) => (1 - Math.pow(x, 2)))(a1);
-    const delta2 = matElemF(mulF)(dot(delta3, transpose(w2)), mat_a1);
-    let dw1 = dot(transpose(trainX), delta2);
-    const db1 = [transpose(delta2).map(sumVec)];
-
-    dw2 = apply(dw2, regLambda, w2);
-    dw1 = apply(dw1, regLambda, w1);
-    w1 = apply(w1, -epsilon, dw1);
-    w2 = apply(w2, -epsilon, dw2);
-    b1 = apply(b1, -epsilon, db1);
-    b2 = apply(b2, -epsilon, db2);
-
-    return {w1, w2, b1, b2};
-};
-
-const train = (model, n, trainX, trainY, regLambda, epsilon) => {
-    for (let _ = 0; _ < n; _++) {
-        let {p, a1} = fwdProp(model, trainX);
-        model = backProp(model, trainX, trainY, p, a1, regLambda, epsilon);
-    }
-
+function backProp(model, trainX, trainY, p, a1, regLambda, epsilon) {
+    var delta3 = zipWith(fIndex1(function(x) {
+        return x - 1;
+    }))(p, trainY);
+    var dw2 = dot(transpose(a1), delta3);
+    var db2 = [transpose(delta3).map(sumVec)];
+    var mat_a1 = matIterF(function(x) {
+        return 1 - Math.pow(x, 2);
+    })(a1);
+    var delta2 = matElemF(mulF)(dot(delta3, transpose(model.w2)), mat_a1);
+    var dw1 = dot(transpose(trainX), delta2);
+    var db1 = [transpose(delta2).map(sumVec)];
+    dw2 = apply(dw2, regLambda, model.w2);
+    dw1 = apply(dw1, regLambda, model.w1);
+    model.w1 = apply(model.w1, -epsilon, dw1);
+    model.w2 = apply(model.w2, -epsilon, dw2);
+    model.b1 = apply(model.b1, -epsilon, db1);
+    model.b2 = apply(model.b2, -epsilon, db2);
     return model;
-};
+}
 
-/* prediction functions */
-const predict = (model, x) => {
-    const {p, _} = fwdProp(model, x);
-    return argMax(p);
-};
+function train(model, n, trainX, trainY, regLambda, epsilon) {
+    for (var _ = 0; _ < n; _++) {
+        var x = fwdProp(model, trainX);
+        model = backProp(model, trainX, trainY, x.p, x.a1, regLambda, epsilon);
+    }
+    return model;
+}
 
-const autoModel = (params) => (Xs, Ys, labels, labelMap) => {
-    const {nHiddenDim, regLambda, epsilon, nLoops} = params;
+function predict(model, x) {
+    var y = fwdProp(model, x);
+    return argMax(y.p);
+}
 
-    const XsNorm = normalize(Xs);
-    const YsNorm = normalize(Ys);
+function autoModel(params) {
+    return function(Xs, Ys, labels, labelMap) {
+        var XsNorm = normalize(Xs);
+        var YsNorm = normalize(Ys);
+        var trainX = zip(XsNorm.units, YsNorm.units);
+        var trainY = labels.map(function(y) {
+            return labelMap[y];
+        });
+        var nInputDim = [xs, ys].length;
+        var nOutputDim = Array.from(new Set(labels)).length;
+        var start = initModel(nInputDim, nOutputDim, params.nHiddenDim);
+        return {
+            model: train(start, params.nLoops, trainX, trainY, params.regLambda,
+                         params.epsilon),
+            XsNorm: XsNorm,
+            YsNorm: YsNorm,
+        };
+    };
+}
 
-    const trainX = zip(XsNorm.units, YsNorm.units);
-    const trainY = labels.map((y) => labelMap[y]);
-    const nInputDim = [xs, ys].length;
-    const nOutputDim = [...new Set(labels)].length;
+function conditionTest(xsNorm, ysNorm) {
+    return function(xs, ys) {
+        return zip(condition(xs, xsNorm.mu, xsNorm.sigma),
+                   condition(ys, ysNorm.mu, ysNorm.sigma));
+    };
+}
 
-    const start = initModel(nInputDim, nOutputDim, nHiddenDim);
-    const model = train(start, nLoops, trainX, trainY, regLambda, epsilon);
-
-    return {model, XsNorm, YsNorm};
-};
-
-const conditionTest = (xsNorm, ysNorm) => (xs, ys) => {
-    const x = condition(xs, xsNorm.mu, xsNorm.sigma);
-    const y = condition(ys, ysNorm.mu, ysNorm.sigma);
-    return zip(x, y);
-};
-
-const edgePermute = (xEdges, yEdges) => {
-    const xs = [];
-    const ys = [];
-
-    for (let ix = 0; ix < xEdges.length; ix ++) {
-        for (let iy = 0; iy < yEdges.length; iy ++) {
-            xs.push(xEdges[ix]);
-            ys.push(yEdges[iy]);
+function edgePermute(xEdges, yEdges) {
+    var n = xEdges.length;
+    var m = yEdges.length;
+    var xs = new Array(n);
+    var ys = new Array(m);
+    for (var ix = 0; ix < n; ix++) {
+        for (var iy = 0; iy < m; iy++) {
+            xs[(m * ix) + iy] = xEdges[ix];
+            ys[(m * ix) + iy] = yEdges[iy];
         }
     }
+    return {
+        xs: xs,
+        ys: ys,
+    };
+}
 
-    return {xs, ys};
-};
-
-const predAxis = ({xs, ys}) => (Xs, Ys, labels, labelMap) => (params) => {
-    const {model, XsNorm, YsNorm} =
-        autoModel(params)(Xs, Ys, labels, labelMap);
-    const test = conditionTest(XsNorm, YsNorm)(xs, ys);
-    const pred = predict(model, test);
-    return transpose([xs, ys, pred]);
-};
+function predAxis(xy) {
+    return function(Xs, Ys, labels, labelMap) {
+        return function(params) {
+            var am = autoModel(params)(Xs, Ys, labels, labelMap);
+            var test = conditionTest(am.XsNorm, am.YsNorm)(xy.xs, xy.ys);
+            var pred = predict(am.model, test);
+            return transpose([xy.xs, xy.ys, pred]);
+        };
+    };
+}

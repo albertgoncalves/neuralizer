@@ -2,6 +2,6 @@ BasedOnStyle: LLVM
 IndentWidth: 4
 ColumnLimit: 80
 SpacesInContainerLiterals: false
-AllowShortFunctionsOnASingleLine: None
-AlignAfterOpenBracket: AlwaysBreak
 AlignOperands: false
+JavaScriptQuotes: Double
+AllowShortFunctionsOnASingleLine: None
