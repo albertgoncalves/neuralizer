@@ -41,10 +41,10 @@ function fwdProp(model, trainX) {
 }
 
 function apply(xs, c, d) {
-    function closure(x) {
+    var y = matIterF(function closure(x) {
         return x * c;
-    }
-    return matElemF(addF)(xs, matIterF(closure)(d));
+    })(d);
+    return matElemF(addF)(xs, y);
 }
 
 function backProp(model, trainX, trainY, p, a1, regLambda, epsilon) {
