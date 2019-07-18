@@ -1,122 +1,132 @@
-function textColor(id, color) {
-    document.getElementById(id).style.color = color;
-}
-
-function helpColor() {
-    textColor(colorState[0].name, colorState[0].hsl);
-    textColor(colorState[1].name, "black");
-}
-
-function affectGrid(x, y) {
-    xs.push(x);
-    ys.push(y);
-    labels.push(colorState[0].name);
-    circleUnit(x, y, colorState[0].hsl, "circle-" + x + "-" + y);
-}
-
-function clickGrid(gridId) {
-    var xy = gridId.match(/\d+/g).map(Number);
-    if (checkXY(xs, xy[0], ys, xy[1])) {
-        affectGrid(xy[0], xy[1]);
-    }
-}
-
-function applyf(xyz) {
-    document.getElementById(gridId(xyz[0], xyz[1])).style.fill =
-        predColorMap[xyz[2]];
-}
-
-function applyPred(predCells) {
-    predCells.forEach(applyf);
-}
-
-function flipColors() {
-    colorState = colorState.reverse();
-    helpColor();
-}
-
-function colorSwitch(key) {
-    var colorObj = keys[key];
-    if (colorObj !== colorState[0]) {
-        flipColors();
-    }
-}
-
-function predExpr() {
-    applyPred(predAxis(predEdges)(xs, ys, labels, labelMap)(params));
-}
-
-function keyAction(key) {
-    if (keys.hasOwnProperty(key)) {
-        colorSwitch(key);
-    } else if ((key === keyN) && (xs.length > 0)) {
-        predExpr();
-    } else if (key === keyY) {
-        location.reload();
-    }
-}
-
-function drawEdges(x, y) {
-    gridUnit(x, y, white.hsl, gridId(x, y));
-}
-
-var blue = {
+var BLUE = {
     "name": "blue",
     "hsl": "hsl(205, 85%, 65%)",
 };
-var red = {
+var RED = {
     "name": "red",
     "hsl": "hsl(5, 95%, 75%)",
 };
-var white = {
+var WHITE = {
     "name": "white",
     "hsl": "hsl(0, 100%, 100%)",
 };
-var keys = {66: blue, 82: red};
-var keyY = 76;
-var keyN = 78;
-var len = document.getElementById("figure").clientWidth;
-var containerId = "axis";
-var res = Math.pow(2, 5);
-var unit = len / res;
-var halfUnit = unit / 2;
-var edges = forRange(0, res).map(function(x) {
-    return x * unit;
-});
-var predEdges = edgePermute(edges, edges);
-var colorState = [red, blue];
-var labelMap = {"red": 0, "blue": 1};
-var predColorMap = {};
-var n = colorState.length;
-for (var i = 0; i < n; i++) {
-    predColorMap[labelMap[colorState[i].name]] = colorState[i].hsl;
+var KEYS = {66: BLUE, 82: RED};
+var KEYY = 76;
+var KEYN = 78;
+var CONTAINERID = "axis";
+var RES = Math.pow(2, 5);
+var UNIT = document.getElementById("figure").clientWidth / RES;
+var EDGES = new Array(RES);
+for (var i = 0; i < RES; i++) {
+    EDGES[i] = i * UNIT;
 }
-var xs = [];
-var ys = [];
-var labels = [];
-var params = {
+var PREDEDGES = edgePermute(EDGES, EDGES);
+var COLORSTATE = [RED, BLUE];
+var LABELMAP = {"red": 0, "blue": 1};
+var PREDCOLORMAP = {};
+var NC = COLORSTATE.length;
+for (var i = 0; i < NC; i++) {
+    PREDCOLORMAP[LABELMAP[COLORSTATE[i].name]] = COLORSTATE[i].hsl;
+}
+var XS = [];
+var YS = [];
+var LABELS = [];
+var PARAMS = {
     nHiddenDim: 4,
     regLambda: 0.05,
     epsilon: 0.05,
     nLoops: 100,
 };
-var gridUnit = createSquare(containerId, unit);
-var circleUnit = createCircle(containerId, halfUnit);
+var GRIDUNIT = createSquare(CONTAINERID, UNIT);
+var CIRCLEUNIT = createCircle(CONTAINERID, UNIT / 2);
 
-helpColor();
-edges.forEach(function(x) {
-    edges.forEach(function(y) {
-        drawEdges(x, y);
-    });
-});
-document.onmouseup = function(e) {
-    var clickId = e.target.id;
-    if (checkGridId(clickId)) {
-        clickGrid(clickId);
+function textColor(id, color) {
+    document.getElementById(id).style.color = color;
+}
+
+function helpColor() {
+    textColor(COLORSTATE[0].name, COLORSTATE[0].hsl);
+    textColor(COLORSTATE[1].name, "black");
+}
+
+function affectGrid(x, y) {
+    XS.push(x);
+    YS.push(y);
+    LABELS.push(COLORSTATE[0].name);
+    CIRCLEUNIT(x, y, COLORSTATE[0].hsl, "circle-" + x + "-" + y);
+}
+
+function clickGrid(gridId) {
+    var xy = gridId.match(/\d+/g);
+    var xys = new Array(2);
+    for (var i = 0; i < 2; i++) {
+        xys[i] = Number(xy[i]);
     }
-};
-document.onkeydown = function(e) {
-    if (e.keyCode) {
-        keyAction(e.keyCode);
+    if (checkXY(XS, xys[0], YS, xys[1])) {
+        affectGrid(xys[0], xys[1]);
     }
-};
+}
+
+function applyf(xyz) {
+    document.getElementById(gridId(xyz[0], xyz[1])).style.fill =
+        PREDCOLORMAP[xyz[2]];
+}
+
+function applyPred(predCells) {
+    var n = predCells.length;
+    for (var i = 0; i < n; i++) {
+        applyf(predCells[i]);
+    }
+}
+
+function flipColors() {
+    COLORSTATE = COLORSTATE.reverse();
+    helpColor();
+}
+
+function colorSwitch(key) {
+    var colorObj = KEYS[key];
+    if (colorObj !== COLORSTATE[0]) {
+        flipColors();
+    }
+}
+
+function predExpr() {
+    applyPred(predAxis(PREDEDGES)(XS, YS, LABELS, LABELMAP)(PARAMS));
+}
+
+function keyAction(key) {
+    if (KEYS.hasOwnProperty(key)) {
+        colorSwitch(key);
+    } else if ((key === KEYN) && (XS.length > 0)) {
+        predExpr();
+    } else if (key === KEYY) {
+        location.reload();
+    }
+}
+
+function drawEdges(x, y) {
+    GRIDUNIT(x, y, WHITE.hsl, gridId(x, y));
+}
+
+function main() {
+    helpColor();
+    for (var ix = 0; ix < RES; ix++) {
+        for (var iy = 0; iy < RES; iy++) {
+            drawEdges(EDGES[ix], EDGES[iy]);
+        }
+    }
+    document.onmouseup = function(e) {
+        var clickId = e.target.id;
+        if (checkGridId(clickId)) {
+            clickGrid(clickId);
+        }
+    };
+    document.onkeydown = function(e) {
+        if (e.keyCode) {
+            keyAction(e.keyCode);
+        }
+    };
+}
+
+main();
