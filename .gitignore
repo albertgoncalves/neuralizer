@@ -6,7 +6,6 @@
 !README.md
 !.tidyrc
 !.clang-format
-!.jshintrc
 !src/
 !*.html
 !*.css
