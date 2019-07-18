@@ -4,8 +4,9 @@
 !.shellhook
 !cover.png
 !README.md
-!.jshintrc
 !.tidyrc
+!.clang-format
+!.jshintrc
 !src/
 !*.html
 !*.css
