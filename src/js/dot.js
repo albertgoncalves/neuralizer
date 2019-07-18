@@ -2,10 +2,6 @@ function addF(a, b) {
     return a + b;
 }
 
-function subF(a, b) {
-    return a - b;
-}
-
 function mulF(a, b) {
     return a * b;
 }
