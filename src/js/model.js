@@ -1,7 +1,8 @@
+function rand2() {
+    return 2 * Math.random() - 1;
+}
+
 function initModel(nInputDim, nOutputDim, nHiddenDim) {
-    var rand2d = gen2dArray(function() {
-        return 2 * Math.random() - 1;
-    });
     var w1f = matIterF(function(x) {
         return x / Math.sqrt(nInputDim);
     });
@@ -9,14 +10,16 @@ function initModel(nInputDim, nOutputDim, nHiddenDim) {
         return x / Math.sqrt(nHiddenDim);
     });
     return {
-        w1: w1f(rand2d(nInputDim, nHiddenDim)),
-        w2: w2f(rand2d(nHiddenDim, nOutputDim)),
-        b1: gen2dArray(function() {
-            return 0;
-        })(1, nHiddenDim),
-        b2: gen2dArray(function() {
-            return 0;
-        })(1, nOutputDim),
+        w1: w1f(generateArray(nInputDim, nHiddenDim, rand2)),
+        w2: w2f(generateArray(nHiddenDim, nOutputDim, rand2)),
+        b1: generateArray(1, nHiddenDim,
+                          function() {
+                              return 0;
+                          }),
+        b2: generateArray(1, nOutputDim,
+                          function() {
+                              return 0;
+                          }),
     };
 }
 
@@ -66,9 +69,9 @@ function applyW(xs, c, d) {
 }
 
 function backProp(model, trainX, trainY, p, a1, regLambda, epsilon) {
-    var delta3 = zipWith(fIndex1(function(x) {
-        return x - 1;
-    }))(p, trainY);
+    var delta3 = zipWith(p, trainY, applyIndexOnly(function(x) {
+                             return x - 1;
+                         }));
     var dw2 = dot(transpose(a1), delta3);
     var db2 = applyT(transpose(delta3));
     var mat_a1 = matIterF(function(x) {

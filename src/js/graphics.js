@@ -42,23 +42,23 @@ function checkGridId(id) {
     return id.indexOf("grid-") !== -1;
 }
 
-function findAll(arr, val) {
-    var n = arr.length;
-    var inds = [];
+function findAll(xs, x) {
+    var n = xs.length;
+    var ix = [];
     for (i = 0; i < n; i++) {
-        if (arr[i] === val) {
-            inds.push(i);
+        if (xs[i] === x) {
+            ix.push(i);
         }
     }
-    return inds;
+    return ix;
 }
 
 function checkXY(xs, x, ys, y) {
-    var ixs = findAll(xs, x);
-    var n = ixs.length;
-    var yys = new Array(n);
+    var ix = findAll(xs, x);
+    var n = ix.length;
+    var iy = new Array(n);
     for (var i = 0; i < n; i++) {
-        yys[i] = ys[ixs[i]];
+        iy[i] = ys[ix[i]];
     }
-    return findAll(yys, y).length === 0;
+    return findAll(iy, y).length === 0;
 }

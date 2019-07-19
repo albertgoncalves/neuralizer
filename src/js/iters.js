@@ -1,49 +1,19 @@
 function zip(a, b) {
     var n = a.length;
-    var xs = new Array(n);
+    var ab = new Array(n);
     for (var i = 0; i < n; i++) {
-        xs[i] = [a[i], b[i]];
+        ab[i] = [a[i], b[i]];
     }
-    return xs;
+    return ab;
 }
 
-function gen2dArray(f) {
-    return function(nx, ny) {
-        return arrayGen(nx, function() {
-            return arrayGen(ny, f);
-        });
-    };
-}
-
-function zipWith(f) {
-    return function(a, b) {
-        var n = a.length;
-        var xs = new Array(n);
-        for (var i = 0; i < n; i++) {
-            xs[i] = f(a[i], b[i]);
-        }
-        return xs;
-    };
-}
-
-function argMax(xs) {
-    var n = xs.length;
-    var ys = new Array(n);
+function zipWith(a, b, f) {
+    var n = a.length;
+    var ab = new Array(n);
     for (var i = 0; i < n; i++) {
-        ys[i] = indexOfMax(xs[i]);
+        ab[i] = f(a[i], b[i]);
     }
-    return ys;
-}
-
-function fIndex1(f) {
-    return function(x, index) {
-        var n = x.length;
-        var z = new Array(n);
-        for (var i = 0; i < n; i++) {
-            z[i] = i === index ? f(x[i]) : x[i];
-        }
-        return z;
-    };
+    return ab;
 }
 
 function arrayGen(n, f) {
@@ -54,26 +24,41 @@ function arrayGen(n, f) {
     return z;
 }
 
-function indexOfMax(array) {
-    var n = array.length;
-    if (n === 0) {
-        return -1;
-    }
-    var maxIndex = 0;
-    var max = array[maxIndex];
-    for (var i = 1; i < n; i++) {
-        if (array[i] > max) {
-            maxIndex = i;
-            max = array[i];
-        }
-    }
-    return maxIndex;
+function generateArray(i, j, f) {
+    return arrayGen(i, function() {
+        return arrayGen(j, f);
+    });
 }
 
-function forRange(min, max) {
-    var z = [];
-    for (var i = min; i < max; i++) {
-        z.push(i);
+function argMax(xs) {
+    var n = xs.length;
+    var ix = new Array(n);
+    for (var i = 0; i < n; i++) {
+        ix[i] = indexOfMax(xs[i]);
     }
-    return z;
+    return ix;
+}
+
+function applyIndexOnly(f) {
+    return function(xs, j) {
+        var n = xs.length;
+        var ys = new Array(n);
+        for (var i = 0; i < n; i++) {
+            ys[i] = i === j ? f(xs[i]) : xs[i];
+        }
+        return ys;
+    };
+}
+
+function indexOfMax(xs) {
+    var n = xs.length;
+    var j = 0;
+    var x = xs[j];
+    for (var i = 1; i < n; i++) {
+        if (xs[i] > x) {
+            x = xs[i];
+            j = i;
+        }
+    }
+    return j;
 }
