@@ -1,4 +1,4 @@
-function rand2() {
+function randomSigned() {
     return 2 * Math.random() - 1;
 }
 
@@ -28,9 +28,9 @@ function deltaSquare(x) {
 
 function initModel(nInputDim, nOutputDim, nHiddenDim) {
     return {
-        w1: matrixApply(matrixRange(nInputDim, nHiddenDim, rand2),
+        w1: matrixApply(matrixRange(nInputDim, nHiddenDim, randomSigned),
                         divSqrt(nInputDim)),
-        w2: matrixApply(matrixRange(nHiddenDim, nOutputDim, rand2),
+        w2: matrixApply(matrixRange(nHiddenDim, nOutputDim, randomSigned),
                         divSqrt(nHiddenDim)),
         b1: matrixRange(1, nHiddenDim, fillZero),
         b2: matrixRange(1, nOutputDim, fillZero),
