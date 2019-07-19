@@ -4,6 +4,10 @@ function gridId(x, y) {
     return "grid-" + x + "-" + y;
 }
 
+function textColor(id, color) {
+    document.getElementById(id).style.color = color;
+}
+
 function createSvg(containerId, svgShape, attributes) {
     var newSvg = document.createElementNS(W3, svgShape);
     var n = attributes.length;

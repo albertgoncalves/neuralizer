@@ -43,10 +43,6 @@ var LABELS = [];
 var XS = [];
 var YS = [];
 
-function textColor(id, color) {
-    document.getElementById(id).style.color = color;
-}
-
 function helpColor() {
     textColor(COLORSTATE[0].name, COLORSTATE[0].hsl);
     textColor(COLORSTATE[1].name, "black");
@@ -71,15 +67,13 @@ function clickGrid(gridId) {
     }
 }
 
-function applyf(xyz) {
-    document.getElementById(gridId(xyz[0], xyz[1])).style.fill =
-        PREDCOLORMAP[xyz[2]];
-}
-
 function applyPred(predCells) {
     var n = predCells.length;
+    var x;
     for (var i = 0; i < n; i++) {
-        applyf(predCells[i]);
+        x = predCells[i];
+        document.getElementById(gridId(x[0], x[1])).style.fill =
+            PREDCOLORMAP[x[2]];
     }
 }
 
