@@ -3,23 +3,23 @@ function rand2() {
 }
 
 function initModel(nInputDim, nOutputDim, nHiddenDim) {
-    var w1f = matIterF(function(x) {
-        return x / Math.sqrt(nInputDim);
-    });
-    var w2f = matIterF(function(x) {
-        return x / Math.sqrt(nHiddenDim);
-    });
     return {
-        w1: w1f(generateArray(nInputDim, nHiddenDim, rand2)),
-        w2: w2f(generateArray(nHiddenDim, nOutputDim, rand2)),
-        b1: generateArray(1, nHiddenDim,
-                          function() {
-                              return 0;
-                          }),
-        b2: generateArray(1, nOutputDim,
-                          function() {
-                              return 0;
-                          }),
+        w1: matrixApply(matrixRange(nInputDim, nHiddenDim, rand2),
+                        function(x) {
+                            return x / Math.sqrt(nInputDim);
+                        }),
+        w2: matrixApply(matrixRange(nHiddenDim, nOutputDim, rand2),
+                        function(x) {
+                            return x / Math.sqrt(nHiddenDim);
+                        }),
+        b1: matrixRange(1, nHiddenDim,
+                        function() {
+                            return 0;
+                        }),
+        b2: matrixRange(1, nOutputDim,
+                        function() {
+                            return 0;
+                        }),
     };
 }
 
@@ -27,27 +27,27 @@ function applyDot(xs, b) {
     var n = xs.length;
     var ys = new Array(n);
     for (var i = 0; i < n; i++) {
-        ys[i] = vecIter(add, xs[i], b);
+        ys[i] = zipWith(xs[i], b, add);
     }
     return ys;
 }
 
 function fwdProp(model, trainX) {
     var z1 = applyDot(dot(trainX, model.w1), model.b1[0]);
-    var a1 = matIterF(function(x) {
+    var a1 = matrixApply(z1, function(x) {
         return Math.tanh(x);
-    })(z1);
+    });
     var z2 = applyDot(dot(a1, model.w2), model.b2[0]);
-    var expScr = matIterF(function(x) {
+    var expScr = matrixApply(z2, function(x) {
         return Math.exp(x);
-    })(z2);
+    });
     var n = expScr.length;
     var sumExpScr = new Array(n);
     for (var i = 0; i < n; i++) {
-        sumExpScr[i] = sumVec(expScr[i]);
+        sumExpScr[i] = sum(expScr[i]);
     }
     return {
-        p: matToVec(div, expScr, sumExpScr),
+        p: flattenWith(expScr, sumExpScr, div),
         a1: a1,
     };
 }
@@ -56,16 +56,16 @@ function applyT(xs) {
     var n = xs.length;
     var ys = new Array(n);
     for (var i = 0; i < n; i++) {
-        ys[i] = sumVec(xs[i]);
+        ys[i] = sum(xs[i]);
     }
     return ys;
 }
 
 function applyW(xs, c, d) {
-    var y = matIterF(function closure(x) {
+    var y = matrixApply(d, function closure(x) {
         return x * c;
-    })(d);
-    return matElemF(add)(xs, y);
+    });
+    return elementsApply(xs, y, add);
 }
 
 function backProp(model, trainX, trainY, p, a1, regLambda, epsilon) {
@@ -74,10 +74,10 @@ function backProp(model, trainX, trainY, p, a1, regLambda, epsilon) {
                          }));
     var dw2 = dot(transpose(a1), delta3);
     var db2 = applyT(transpose(delta3));
-    var mat_a1 = matIterF(function(x) {
+    var mat_a1 = matrixApply(a1, function(x) {
         return 1 - Math.pow(x, 2);
-    })(a1);
-    var delta2 = matElemF(mul)(dot(delta3, transpose(model.w2)), mat_a1);
+    });
+    var delta2 = elementsApply(dot(delta3, transpose(model.w2)), mat_a1, mul);
     var dw1 = dot(transpose(trainX), delta2);
     var db1 = applyT(transpose(delta2));
     dw2 = applyW(dw2, regLambda, model.w2);
