@@ -20,27 +20,45 @@ function initModel(nInputDim, nOutputDim, nHiddenDim) {
     };
 }
 
+function applyDot(xs, b) {
+    var n = xs.length;
+    var ys = new Array(n);
+    for (var i = 0; i < n; i++) {
+        ys[i] = vecIterF(addF)(xs[i], b);
+    }
+    return ys;
+}
+
 function fwdProp(model, trainX) {
-    var z1 = dot(trainX, model.w1).map(function(x) {
-        return vecIterF(addF)(x, model.b1[0]);
-    });
+    var z1 = applyDot(dot(trainX, model.w1), model.b1[0]);
     var a1 = matIterF(function(x) {
         return Math.tanh(x);
     })(z1);
-    var z2 = dot(a1, model.w2).map(function(x) {
-        return vecIterF(addF)(x, model.b2[0]);
-    });
+    var z2 = applyDot(dot(a1, model.w2), model.b2[0]);
     var expScr = matIterF(function(x) {
         return Math.exp(x);
     })(z2);
-    var sumExpScr = expScr.map(sumVec);
+    var n = expScr.length;
+    var sumExpScr = new Array(n);
+    for (var i = 0; i < n; i++) {
+        sumExpScr[i] = sumVec(expScr[i]);
+    }
     return {
         p: matToVecF(divF)(expScr, sumExpScr),
         a1: a1,
     };
 }
 
-function apply(xs, c, d) {
+function applyT(xs) {
+    var n = xs.length;
+    var ys = new Array(n);
+    for (var i = 0; i < n; i++) {
+        ys[i] = sumVec(xs[i]);
+    }
+    return ys;
+}
+
+function applyW(xs, c, d) {
     var y = matIterF(function closure(x) {
         return x * c;
     })(d);
@@ -52,19 +70,19 @@ function backProp(model, trainX, trainY, p, a1, regLambda, epsilon) {
         return x - 1;
     }))(p, trainY);
     var dw2 = dot(transpose(a1), delta3);
-    var db2 = [transpose(delta3).map(sumVec)];
+    var db2 = applyT(transpose(delta3));
     var mat_a1 = matIterF(function(x) {
         return 1 - Math.pow(x, 2);
     })(a1);
     var delta2 = matElemF(mulF)(dot(delta3, transpose(model.w2)), mat_a1);
     var dw1 = dot(transpose(trainX), delta2);
-    var db1 = [transpose(delta2).map(sumVec)];
-    dw2 = apply(dw2, regLambda, model.w2);
-    dw1 = apply(dw1, regLambda, model.w1);
-    model.w1 = apply(model.w1, -epsilon, dw1);
-    model.w2 = apply(model.w2, -epsilon, dw2);
-    model.b1 = apply(model.b1, -epsilon, db1);
-    model.b2 = apply(model.b2, -epsilon, db2);
+    var db1 = applyT(transpose(delta2));
+    dw2 = applyW(dw2, regLambda, model.w2);
+    dw1 = applyW(dw1, regLambda, model.w1);
+    model.w1 = applyW(model.w1, -epsilon, dw1);
+    model.w2 = applyW(model.w2, -epsilon, dw2);
+    model.b1 = applyW(model.b1, -epsilon, [db1]);
+    model.b2 = applyW(model.b2, -epsilon, [db2]);
     return model;
 }
 
@@ -86,9 +104,11 @@ function autoModel(params) {
         var xsNorm = normalize(xs);
         var ysNorm = normalize(ys);
         var trainX = zip(xsNorm.units, ysNorm.units);
-        var trainY = labels.map(function(y) {
-            return labelMap[y];
-        });
+        var n = labels.length;
+        var trainY = new Array(n);
+        for (var i = 0; i < n; i++) {
+            trainY[i] = labelMap[labels[i]];
+        }
         var nInputDim = [xs, ys].length;
         var nOutputDim = Array.from(new Set(labels)).length;
         var start = initModel(nInputDim, nOutputDim, params.nHiddenDim);

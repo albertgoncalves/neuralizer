@@ -44,9 +44,8 @@ function condition(xs, mu, sigma) {
 function normalize(xs) {
     var mu = mean(xs);
     var sigma = std(xs, mu);
-    var units = condition(xs, mu, sigma);
     return {
-        units: units,
+        units: condition(xs, mu, sigma),
         mu: mu,
         sigma: sigma,
     };
