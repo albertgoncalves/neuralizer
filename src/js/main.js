@@ -19,8 +19,6 @@ var KEYN = 78;
 var RES = Math.pow(2, 5);
 var CONTAINERID = "axis";
 var UNIT = document.getElementById("figure").clientWidth / RES;
-var GRIDUNIT = createSquare(CONTAINERID, UNIT);
-var CIRCLEUNIT = createCircle(CONTAINERID, UNIT / 2);
 var EDGES = new Array(RES);
 for (var i = 0; i < RES; i++) {
     EDGES[i] = i * UNIT;
@@ -58,7 +56,8 @@ function affectGrid(x, y) {
     XS.push(x);
     YS.push(y);
     LABELS.push(COLORSTATE[0].name);
-    CIRCLEUNIT(x, y, COLORSTATE[0].hsl, "circle-" + x + "-" + y);
+    createCircle(CONTAINERID, UNIT / 2, x, y, COLORSTATE[0].hsl,
+                 "circle-" + x + "-" + y);
 }
 
 function clickGrid(gridId) {
@@ -111,7 +110,7 @@ function keyAction(key) {
 }
 
 function drawEdges(x, y) {
-    GRIDUNIT(x, y, WHITE.hsl, gridId(x, y));
+    createSquare(CONTAINERID, UNIT, x, y, WHITE.hsl, gridId(x, y));
 }
 
 function main() {
