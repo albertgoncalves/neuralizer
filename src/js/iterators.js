@@ -109,7 +109,7 @@ function matrixApply(xs, f) {
     return zs;
 }
 
-function flattenWith(xs, ys, f) {
+function zipMatrixArrayWith(xs, ys, f) {
     var n = xs.length;
     var m = xs[0].length;
     var zs = new Array(n);
@@ -135,6 +135,15 @@ function elementsApply(xs, ys, f) {
         zs[ix] = z;
     }
     return zs;
+}
+
+function flattenSum(xs) {
+    var n = xs.length;
+    var ys = new Array(n);
+    for (var i = 0; i < n; i++) {
+        ys[i] = sum(xs[i]);
+    }
+    return ys;
 }
 
 function dot(xs, ys) {

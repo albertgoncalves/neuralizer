@@ -96,7 +96,7 @@ function colorSwitch(key) {
 }
 
 function predExpr() {
-    applyPred(predAxis(PREDEDGES)(XS, YS, LABELS, LABELMAP)(PARAMS));
+    applyPred(predAxis(PREDEDGES, XS, YS, LABELS, LABELMAP, PARAMS));
 }
 
 function keyAction(key) {
