@@ -89,29 +89,25 @@ function colorSwitch(key) {
     }
 }
 
-function predExpr() {
-    applyPred(predAxis(PREDEDGES, XS, YS, LABELS, LABELMAP, PARAMS));
-}
-
 function keyAction(key) {
     if (KEYS.hasOwnProperty(key)) {
         colorSwitch(key);
     } else if ((key === KEYN) && (XS.length > 0)) {
-        predExpr();
+        applyPred(predAxis(PREDEDGES, XS, YS, LABELS, LABELMAP, PARAMS));
     } else if (key === KEYY) {
         location.reload();
     }
 }
 
-function drawEdges(x, y) {
-    createSquare(CONTAINERID, UNIT, x, y, WHITE.hsl, gridId(x, y));
-}
-
 function main() {
     helpColor();
-    for (var ix = 0; ix < RES; ix++) {
-        for (var iy = 0; iy < RES; iy++) {
-            drawEdges(EDGES[ix], EDGES[iy]);
+    for (var i = 0; i < RES; i++) {
+        var x;
+        var y;
+        for (var j = 0; j < RES; j++) {
+            x = EDGES[i];
+            y = EDGES[j];
+            createSquare(CONTAINERID, UNIT, x, y, WHITE.hsl, gridId(x, y));
         }
     }
     document.onmouseup = function(e) {
