@@ -42,9 +42,9 @@ function arrayRange(n, f) {
     return xs;
 }
 
-function matrixRange(i, j, f) {
-    return arrayRange(i, function() {
-        return arrayRange(j, f);
+function matrixRange(n, m, f) {
+    return arrayRange(n, function() {
+        return arrayRange(m, f);
     });
 }
 
@@ -59,7 +59,7 @@ function applyIndexOnly(f) {
     };
 }
 
-function indexOfMax(xs) {
+function indexMax(xs) {
     var n = xs.length;
     var j = 0;
     var x = xs[j];
@@ -76,7 +76,7 @@ function argMax(xs) {
     var n = xs.length;
     var ix = new Array(n);
     for (var i = 0; i < n; i++) {
-        ix[i] = indexOfMax(xs[i]);
+        ix[i] = indexMax(xs[i]);
     }
     return ix;
 }
@@ -95,7 +95,7 @@ function transpose(xs) {
     return ys;
 }
 
-function matrixApply(xs, f) {
+function matrixWith(xs, f) {
     var n = xs.length;
     var m = xs[0].length;
     var zs = new Array(n);
@@ -123,7 +123,7 @@ function zipMatrixArrayWith(xs, ys, f) {
     return zs;
 }
 
-function elementsApply(xs, ys, f) {
+function zipElementsWith(xs, ys, f) {
     var n = xs.length;
     var m = xs[0].length;
     var zs = new Array(n);

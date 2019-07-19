@@ -28,10 +28,10 @@ function deltaSquare(x) {
 
 function initModel(nInputDim, nOutputDim, nHiddenDim) {
     return {
-        w1: matrixApply(matrixRange(nInputDim, nHiddenDim, randomSigned),
-                        divSqrt(nInputDim)),
-        w2: matrixApply(matrixRange(nHiddenDim, nOutputDim, randomSigned),
-                        divSqrt(nHiddenDim)),
+        w1: matrixWith(matrixRange(nInputDim, nHiddenDim, randomSigned),
+                       divSqrt(nInputDim)),
+        w2: matrixWith(matrixRange(nHiddenDim, nOutputDim, randomSigned),
+                       divSqrt(nHiddenDim)),
         b1: matrixRange(1, nHiddenDim, fillZero),
         b2: matrixRange(1, nOutputDim, fillZero),
     };
@@ -48,9 +48,9 @@ function applyDot(xs, b) {
 
 function fwdProp(model, trainX) {
     var z1 = applyDot(dot(trainX, model.w1), model.b1[0]);
-    var a1 = matrixApply(z1, Math.tanh);
+    var a1 = matrixWith(z1, Math.tanh);
     var z2 = applyDot(dot(a1, model.w2), model.b2[0]);
-    var expScr = matrixApply(z2, Math.exp);
+    var expScr = matrixWith(z2, Math.exp);
     var n = expScr.length;
     var sumExpScr = new Array(n);
     for (var i = 0; i < n; i++) {
@@ -63,16 +63,16 @@ function fwdProp(model, trainX) {
 }
 
 function applyW(xs, c, d) {
-    var y = matrixApply(d, mulConstant(c));
-    return elementsApply(xs, y, add);
+    var y = matrixWith(d, mulConstant(c));
+    return zipElementsWith(xs, y, add);
 }
 
 function backProp(model, trainX, trainY, p, a1, regLambda, epsilon) {
     var delta3 = zipWith(p, trainY, applyIndexOnly(subOne));
     var dw2 = dot(transpose(a1), delta3);
     var db2 = flattenSum(transpose(delta3));
-    var mat_a1 = matrixApply(a1, deltaSquare);
-    var delta2 = elementsApply(dot(delta3, transpose(model.w2)), mat_a1, mul);
+    var mat_a1 = matrixWith(a1, deltaSquare);
+    var delta2 = zipElementsWith(dot(delta3, transpose(model.w2)), mat_a1, mul);
     var dw1 = dot(transpose(trainX), delta2);
     var db1 = flattenSum(transpose(delta2));
     dw2 = applyW(dw2, regLambda, model.w2);
