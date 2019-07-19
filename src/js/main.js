@@ -93,7 +93,7 @@ function keyAction(key) {
     if (KEYS.hasOwnProperty(key)) {
         colorSwitch(key);
     } else if ((key === KEYN) && (XS.length > 0)) {
-        applyPred(predAxis(PREDEDGES, XS, YS, LABELS, LABELMAP, PARAMS));
+        applyPred(pipeline(PREDEDGES, XS, YS, LABELS, LABELMAP, PARAMS));
     } else if (key === KEYY) {
         location.reload();
     }

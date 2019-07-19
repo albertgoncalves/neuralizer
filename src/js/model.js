@@ -26,7 +26,7 @@ function deltaSquare(x) {
     return 1 - Math.pow(x, 2);
 }
 
-function initModel(nInputDim, nOutputDim, nHiddenDim) {
+function initialize(nInputDim, nOutputDim, nHiddenDim) {
     return {
         w1: matrixWith(matrixRange(nInputDim, nHiddenDim, randomSigned),
                        divSqrt(nInputDim)),
@@ -63,15 +63,14 @@ function fwdProp(model, trainX) {
 }
 
 function applyW(xs, c, d) {
-    var y = matrixWith(d, mulConstant(c));
-    return zipElementsWith(xs, y, add);
+    return zipElementsWith(xs, matrixWith(d, mulConstant(c)), add);
 }
 
-function backProp(model, trainX, trainY, p, a1, regLambda, epsilon) {
-    var delta3 = zipWith(p, trainY, applyIndexOnly(subOne));
-    var dw2 = dot(transpose(a1), delta3);
+function backProp(model, trainX, trainY, fp, regLambda, epsilon) {
+    var delta3 = zipWith(fp.p, trainY, applyIndexOnly(subOne));
+    var dw2 = dot(transpose(fp.a1), delta3);
     var db2 = flattenSum(transpose(delta3));
-    var mat_a1 = matrixWith(a1, deltaSquare);
+    var mat_a1 = matrixWith(fp.a1, deltaSquare);
     var delta2 = zipElementsWith(dot(delta3, transpose(model.w2)), mat_a1, mul);
     var dw1 = dot(transpose(trainX), delta2);
     var db1 = flattenSum(transpose(delta2));
@@ -81,40 +80,17 @@ function backProp(model, trainX, trainY, p, a1, regLambda, epsilon) {
     model.w2 = applyW(model.w2, -epsilon, dw2);
     model.b1 = applyW(model.b1, -epsilon, [db1]);
     model.b2 = applyW(model.b2, -epsilon, [db2]);
-    return model;
 }
 
 function train(model, n, trainX, trainY, regLambda, epsilon) {
     for (var _ = 0; _ < n; _++) {
-        var x = fwdProp(model, trainX);
-        model = backProp(model, trainX, trainY, x.p, x.a1, regLambda, epsilon);
+        backProp(model, trainX, trainY, fwdProp(model, trainX), regLambda,
+                 epsilon);
     }
-    return model;
 }
 
 function predict(model, x) {
-    var y = fwdProp(model, x);
-    return argMax(y.p);
-}
-
-function autoModel(params, xs, ys, labels, labelMap) {
-    var xsNorm = normalize(xs);
-    var ysNorm = normalize(ys);
-    var trainX = zip(xsNorm.units, ysNorm.units);
-    var n = labels.length;
-    var trainY = new Array(n);
-    for (var i = 0; i < n; i++) {
-        trainY[i] = labelMap[labels[i]];
-    }
-    var nInputDim = [xs, ys].length;
-    var nOutputDim = Array.from(new Set(labels)).length;
-    var start = initModel(nInputDim, nOutputDim, params.nHiddenDim);
-    return {
-        model: train(start, params.nLoops, trainX, trainY, params.regLambda,
-                     params.epsilon),
-        xsNorm: xsNorm,
-        ysNorm: ysNorm,
-    };
+    return argMax(fwdProp(model, x).p);
 }
 
 function applyUnitScale(xUnit, yUnit, xs, ys) {
@@ -140,9 +116,18 @@ function edgePermute(xEdges, yEdges) {
     };
 }
 
-function predAxis(xy, xs, ys, labels, labelMap, params) {
-    var am = autoModel(params, xs, ys, labels, labelMap);
-    var test = applyUnitScale(am.xsNorm, am.ysNorm, xy.xs, xy.ys);
-    var pred = predict(am.model, test);
-    return transpose([xy.xs, xy.ys, pred]);
+function pipeline(xy, xs, ys, labels, labelMap, params) {
+    var xsNorm = normalize(xs);
+    var ysNorm = normalize(ys);
+    var trainX = zip(xsNorm.units, ysNorm.units);
+    var n = labels.length;
+    var trainY = new Array(n);
+    for (var i = 0; i < n; i++) {
+        trainY[i] = labelMap[labels[i]];
+    }
+    var model = initialize(2, 2, params.nHiddenDim);
+    var test = applyUnitScale(xsNorm, ysNorm, xy.xs, xy.ys);
+    train(model, params.nLoops, trainX, trainY, params.regLambda,
+          params.epsilon);
+    return transpose([xy.xs, xy.ys, predict(model, test)]);
 }
