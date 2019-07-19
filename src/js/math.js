@@ -1,38 +1,38 @@
-function addF(a, b) {
+function add(a, b) {
     return a + b;
 }
 
-function mulF(a, b) {
+function mul(a, b) {
     return a * b;
 }
 
-function divF(a, b) {
+function div(a, b) {
     return a / b;
 }
 
-function mean(array) {
-    var n = array.length;
-    var sum = 0;
+function mean(xs) {
+    var n = xs.length;
+    var s = 0;
     for (var i = 0; i < n; i++) {
-        sum += array[i];
+        s += xs[i];
     }
-    return sum / n;
+    return s / n;
 }
 
-function sqDiff(array, mu) {
-    var n = array.length;
-    var xs = new Array(n);
+function squareDiff(xs, mu) {
+    var n = xs.length;
+    var ys = new Array(n);
     for (var i = 0; i < n; i++) {
-        xs[i] = Math.pow(array[i] - mu, 2);
+        ys[i] = Math.pow(xs[i] - mu, 2);
     }
-    return xs;
+    return ys;
 }
 
-function std(array, mu) {
-    return Math.sqrt(mean(sqDiff(array, mu)));
+function std(xs, mu) {
+    return Math.sqrt(mean(squareDiff(xs, mu)));
 }
 
-function condition(xs, mu, sigma) {
+function unitScale(xs, mu, sigma) {
     var n = xs.length;
     var ys = new Array(n);
     for (var i = 0; i < n; i++) {
@@ -45,7 +45,7 @@ function normalize(xs) {
     var mu = mean(xs);
     var sigma = std(xs, mu);
     return {
-        units: condition(xs, mu, sigma),
+        units: unitScale(xs, mu, sigma),
         mu: mu,
         sigma: sigma,
     };
@@ -65,51 +65,36 @@ function transpose(xs) {
     return ys;
 }
 
-function sumVec(x) {
-    var n = x.length;
-    var sum = 0;
+function sumVec(xs) {
+    var n = xs.length;
+    var s = 0;
     for (var i = 0; i < n; i++) {
-        sum += x[i];
+        s += xs[i];
     }
-    return sum;
+    return s;
 }
 
-function matToVecF(f) {
-    return (function(xs, y) {
-        var n = xs.length;
-        var m = xs[0].length;
-        var zs = new Array(n);
-        for (var i = 0; i < n; i++) {
-            var z = new Array(m);
-            for (var j = 0; j < m; j++) {
-                z[j] = f(xs[i][j], y[i]);
-            }
-            zs[i] = z;
+function matToVec(f, xs, ys) {
+    var n = xs.length;
+    var m = xs[0].length;
+    var zs = new Array(n);
+    for (var i = 0; i < n; i++) {
+        var z = new Array(m);
+        for (var j = 0; j < m; j++) {
+            z[j] = f(xs[i][j], ys[i]);
         }
-        return zs;
-    });
+        zs[i] = z;
+    }
+    return zs;
 }
 
-function vecIterF(f) {
-    return (function(x, y) {
-        var n = x.length;
-        var z = new Array(n);
-        for (var i = 0; i < n; i++) {
-            z[i] = f(x[i], y[i]);
-        }
-        return z;
-    });
-}
-
-function vecElemSumF(f) {
-    return (function(x, y) {
-        var n = x.length;
-        var sum = 0;
-        for (var i = 0; i < n; i++) {
-            sum += f(x[i], y[i]);
-        }
-        return sum;
-    });
+function vecIter(f, xs, ys) {
+    var n = xs.length;
+    var zs = new Array(n);
+    for (var i = 0; i < n; i++) {
+        zs[i] = f(xs[i], ys[i]);
+    }
+    return zs;
 }
 
 function dot(xs, ys) {
@@ -120,7 +105,7 @@ function dot(xs, ys) {
     for (var ix = 0; ix < n; ix++) {
         var z = new Array(m);
         for (var iy = 0; iy < m; iy++) {
-            z[iy] = vecElemSumF(mulF)(xs[ix], ysT[iy]);
+            z[iy] = zipWithSum(xs[ix], ysT[iy], mul);
         }
         zs[ix] = z;
     }

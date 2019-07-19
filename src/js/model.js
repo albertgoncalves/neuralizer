@@ -27,7 +27,7 @@ function applyDot(xs, b) {
     var n = xs.length;
     var ys = new Array(n);
     for (var i = 0; i < n; i++) {
-        ys[i] = vecIterF(addF)(xs[i], b);
+        ys[i] = vecIter(add, xs[i], b);
     }
     return ys;
 }
@@ -47,7 +47,7 @@ function fwdProp(model, trainX) {
         sumExpScr[i] = sumVec(expScr[i]);
     }
     return {
-        p: matToVecF(divF)(expScr, sumExpScr),
+        p: matToVec(div, expScr, sumExpScr),
         a1: a1,
     };
 }
@@ -65,7 +65,7 @@ function applyW(xs, c, d) {
     var y = matIterF(function closure(x) {
         return x * c;
     })(d);
-    return matElemF(addF)(xs, y);
+    return matElemF(add)(xs, y);
 }
 
 function backProp(model, trainX, trainY, p, a1, regLambda, epsilon) {
@@ -77,7 +77,7 @@ function backProp(model, trainX, trainY, p, a1, regLambda, epsilon) {
     var mat_a1 = matIterF(function(x) {
         return 1 - Math.pow(x, 2);
     })(a1);
-    var delta2 = matElemF(mulF)(dot(delta3, transpose(model.w2)), mat_a1);
+    var delta2 = matElemF(mul)(dot(delta3, transpose(model.w2)), mat_a1);
     var dw1 = dot(transpose(trainX), delta2);
     var db1 = applyT(transpose(delta2));
     dw2 = applyW(dw2, regLambda, model.w2);
@@ -124,11 +124,9 @@ function autoModel(params) {
     };
 }
 
-function conditionTest(xsNorm, ysNorm) {
-    return function(xs, ys) {
-        return zip(condition(xs, xsNorm.mu, xsNorm.sigma),
-                   condition(ys, ysNorm.mu, ysNorm.sigma));
-    };
+function applyUnitScale(xUnit, yUnit, xs, ys) {
+    return zip(unitScale(xs, xUnit.mu, xUnit.sigma),
+               unitScale(ys, yUnit.mu, yUnit.sigma));
 }
 
 function edgePermute(xEdges, yEdges) {
@@ -153,7 +151,7 @@ function predAxis(xy) {
     return function(xs, ys, labels, labelMap) {
         return function(params) {
             var am = autoModel(params)(xs, ys, labels, labelMap);
-            var test = conditionTest(am.xsNorm, am.ysNorm)(xy.xs, xy.ys);
+            var test = applyUnitScale(am.xsNorm, am.ysNorm, xy.xs, xy.ys);
             var pred = predict(am.model, test);
             return transpose([xy.xs, xy.ys, pred]);
         };

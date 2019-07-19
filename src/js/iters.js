@@ -16,6 +16,15 @@ function zipWith(a, b, f) {
     return ab;
 }
 
+function zipWithSum(xs, ys, f) {
+    var n = xs.length;
+    var s = 0;
+    for (var i = 0; i < n; i++) {
+        s += f(xs[i], ys[i]);
+    }
+    return s;
+}
+
 function arrayGen(n, f) {
     var z = new Array(n);
     for (var i = 0; i < n; i++) {
