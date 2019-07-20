@@ -4,6 +4,12 @@ html, body {
     margin: 0;
 }
 
+svg {
+    overflow: visible;
+    height: 100%;
+    width: 100%;
+}
+
 .spacer {
     height: 100px;
 }
@@ -20,7 +26,7 @@ div {
 }
 
 #help {
-    color: dimgray;
+    color: black;
     padding: 10px;
 }
 
@@ -28,14 +34,9 @@ div {
     margin: 0px;
 }
 
-svg {
-    overflow: visible;
-    height: 100%;
-    width: 100%;
-}
-
-code {
+.hotkey {
     font-size: 20px;
     font-weight: bold;
+    font-family: Courier New, monospace;
     color: black;
 }
