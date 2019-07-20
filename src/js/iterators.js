@@ -117,12 +117,12 @@ function matrixMap(xs, f) {
     var n = xs.length;
     var m = xs[0].length;
     var zs = new Array(n);
-    for (var ix = 0; ix < n; ix++) {
+    for (var i = 0; i < n; i++) {
         var z = new Array(m);
-        for (var iy = 0; iy < m; iy++) {
-            z[iy] = f(xs[ix][iy]);
+        for (var j = 0; j < m; j++) {
+            z[j] = f(xs[i][j]);
         }
-        zs[ix] = z;
+        zs[i] = z;
     }
     return zs;
 }
