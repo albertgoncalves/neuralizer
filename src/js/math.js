@@ -45,7 +45,7 @@ function normalize(xs) {
     var mu = mean(xs);
     var sigma = std(xs, mu);
     return {
-        units: unitScale(xs, mu, sigma),
+        unit: unitScale(xs, mu, sigma),
         mu: mu,
         sigma: sigma,
     };

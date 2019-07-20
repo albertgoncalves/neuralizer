@@ -16,7 +16,7 @@ div {
 #figure {
     height: 512px;
     width: 512px;
-    border: 3px solid gray;
+    border: 2px solid black;
 }
 
 #help {

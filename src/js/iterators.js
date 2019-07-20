@@ -34,6 +34,17 @@ function sum(xs) {
     return s;
 }
 
+function findAll(xs, x) {
+    var n = xs.length;
+    var ys = [];
+    for (i = 0; i < n; i++) {
+        if (xs[i] === x) {
+            ys.push(i);
+        }
+    }
+    return ys;
+}
+
 function permute(xs, ys) {
     var n = xs.length;
     var m = ys.length;

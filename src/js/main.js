@@ -1,143 +1,128 @@
-var BLUE = {
-    "name": "blue",
-    "hsl": "hsl(205, 85%, 65%)",
-};
-var RED = {
-    "name": "red",
-    "hsl": "hsl(5, 95%, 75%)",
-};
-var WHITE = {
-    "name": "white",
-    "hsl": "hsl(0, 100%, 100%)",
-};
-var KEYCOLOR = {
-    66: BLUE,
-    82: RED,
-};
-var KEYPRESS = {
-    y: 76,
-    n: 78,
-};
-var RESOLUTION = Math.pow(2, 5);
-var CONTAINERID = "axis";
-var UNIT = document.getElementById("figure").clientWidth / RESOLUTION;
-var EDGES = new Array(RESOLUTION);
-for (var i = 0; i < RESOLUTION; i++) {
-    EDGES[i] = i * UNIT;
-}
-var PREDEDGES = permute(EDGES, EDGES);
-var COLORSTATE = [RED, BLUE];
-var LABELMAP = {
-    "red": 0,
-    "blue": 1,
-};
-var COLORMAP = [RED.hsl, BLUE.hsl];
-var PARAMS = {
-    inputDim: 2,
-    outputDim: 2,
-    hiddenDim: 4,
-    lambda: 0.05,
-    epsilon: 0.05,
-    n: 100,
-};
-var STATE = {
-    xs: [],
-    ys: [],
-    labels: [],
-};
-
-function helpColor() {
-    textColor(COLORSTATE[0].name, COLORSTATE[0].hsl);
-    textColor(COLORSTATE[1].name, "black");
+function helpColor(state) {
+    textColor(state.selection[0].name, state.selection[0].hsl);
+    textColor(state.selection[1].name, "black");
 }
 
-function affectGrid(x, y) {
-    STATE.xs.push(x);
-    STATE.ys.push(y);
-    STATE.labels.push(COLORSTATE[0].name);
-    createCircle(CONTAINERID, UNIT / 2, x, y, COLORSTATE[0].hsl,
+function flipColors(state) {
+    state.selection = state.selection.reverse();
+    helpColor(state);
+}
+
+function affectGrid(state, unit, x, y) {
+    state.xs.push(x);
+    state.ys.push(y);
+    state.labels.push(state.selection[0].value);
+    createCircle(state.containerId, unit / 2, x, y, state.selection[0].hsl,
                  "circle-" + x + "-" + y);
 }
 
-function clickGrid(gridId) {
+function clickGrid(state, unit, gridId) {
     var coordinate = gridId.match(/\d+/g);
     var x = Number(coordinate[0]);
     var y = Number(coordinate[1]);
-    if (findXY(STATE.xs, STATE.ys, x, y)) {
-        affectGrid(x, y);
+    if (findCoordinate(state.xs, state.ys, x, y)) {
+        affectGrid(state, unit, x, y);
     }
 }
 
-function applyPred(predCells) {
-    var n = predCells.length;
-    var x;
+function resultMap(terrain, color) {
+    var n = terrain.length;
+    var p;
+    var q;
     for (var i = 0; i < n; i++) {
-        x = predCells[i];
-        document.getElementById(gridId(x[0], x[1])).style.fill =
-            COLORMAP[x[2]];
+        p = terrain[i];
+        if (p[2] === 0) {
+            q = color.red;
+        } else {
+            q = color.blue;
+        }
+        document.getElementById(gridId(p[0], p[1])).style.fill = q.hsl;
     }
 }
 
-function flipColors() {
-    COLORSTATE = COLORSTATE.reverse();
-    helpColor();
-}
-
-function colorSwitch(key) {
-    var colorObj = KEYCOLOR[key];
-    if (colorObj !== COLORSTATE[0]) {
-        flipColors();
-    }
-}
-
-function pipeline(xy, xs, ys, labels, labelMap, params) {
-    var xsNorm = normalize(xs);
-    var ysNorm = normalize(ys);
-    var trainX = zip(xsNorm.units, ysNorm.units);
-    var n = labels.length;
-    var trainY = new Array(n);
-    for (var i = 0; i < n; i++) {
-        trainY[i] = labelMap[labels[i]];
-    }
-    var testX = zip(unitScale(xy.xs, xsNorm.mu, xsNorm.sigma),
-                    unitScale(xy.ys, ysNorm.mu, ysNorm.sigma));
-    var testY = neuralNetwork(trainX, trainY, testX, params.inputDim,
-                              params.outputDim, params.hiddenDim,
-                              params.lambda, params.epsilon, params.n);
-    return transpose([xy.xs, xy.ys, testY]);
-}
-
-function keyAction(key) {
-    if (KEYCOLOR.hasOwnProperty(key)) {
-        colorSwitch(key);
-    } else if ((key === KEYPRESS.n) && (STATE.xs.length > 0)) {
-        applyPred(pipeline(PREDEDGES, STATE.xs, STATE.ys, STATE.labels,
-                           LABELMAP, PARAMS));
-    } else if (key === KEYPRESS.y) {
+function keyAction(state, key, color) {
+    if (state.keyColor.hasOwnProperty(key)) {
+        if (state.keyColor[key] !== state.selection[0]) {
+            flipColors(state);
+        }
+    } else if ((key === state.keyPress.n) && (state.xs.length > 0)) {
+        var xs = normalize(state.xs);
+        var ys = normalize(state.ys);
+        var trainX = zip(xs.unit, ys.unit);
+        var testX = zip(unitScale(state.terrain.target.xs, xs.mu, xs.sigma),
+                        unitScale(state.terrain.target.ys, ys.mu, ys.sigma));
+        var testY = neuralNetwork(trainX, state.labels, testX, state.inputDim,
+                                  state.outputDim, state.hiddenDim,
+                                  state.lambda, state.epsilon, state.n);
+        var response =
+            [state.terrain.target.xs, state.terrain.target.ys, testY];
+        resultMap(transpose(response), color);
+    } else if (key === state.keyPress.y) {
         location.reload();
     }
 }
 
 function main() {
-    helpColor();
-    for (var i = 0; i < RESOLUTION; i++) {
+    var color = {
+        blue: {
+            name: "blue",
+            hsl: "hsl(205, 85%, 65%)",
+            value: 1,
+        },
+        red: {
+            name: "red",
+            hsl: "hsl(5, 95%, 75%)",
+            value: 0,
+        },
+        white: {
+            name: "white",
+            hsl: "hsl(0, 100%, 100%)",
+        },
+    };
+    var resolution = Math.pow(2, 5);
+    var unit = document.getElementById("figure").clientWidth / resolution;
+    var state = {
+        containerId: "axis",
+        selection: [color.red, color.blue],
+        terrain: calculateEdges(resolution, unit),
+        keyPress: {
+            y: 76,
+            n: 78,
+        },
+        keyColor: {
+            66: color.blue,
+            82: color.red,
+        },
+        inputDim: 2,
+        outputDim: 2,
+        hiddenDim: 4,
+        lambda: 0.05,
+        epsilon: 0.05,
+        n: 100,
+        xs: [],
+        ys: [],
+        labels: [],
+    };
+    helpColor(state);
+    for (var i = 0; i < resolution; i++) {
         var x;
         var y;
-        for (var j = 0; j < RESOLUTION; j++) {
-            x = EDGES[i];
-            y = EDGES[j];
-            createSquare(CONTAINERID, UNIT, x, y, WHITE.hsl, gridId(x, y));
+        for (var j = 0; j < resolution; j++) {
+            x = state.terrain.edges[i];
+            y = state.terrain.edges[j];
+            createSquare(state.containerId, unit, x, y, color.white.hsl,
+                         gridId(x, y));
         }
     }
     document.onmouseup = function(e) {
         var clickId = e.target.id;
         if (checkGridId(clickId)) {
-            clickGrid(clickId);
+            clickGrid(state, unit, clickId);
         }
     };
     document.onkeydown = function(e) {
         if (e.keyCode) {
-            keyAction(e.keyCode);
+            keyAction(state, e.keyCode, color);
         }
     };
 }

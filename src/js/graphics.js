@@ -46,18 +46,7 @@ function checkGridId(id) {
     return id.indexOf("grid-") !== -1;
 }
 
-function findAll(xs, x) {
-    var n = xs.length;
-    var ys = [];
-    for (i = 0; i < n; i++) {
-        if (xs[i] === x) {
-            ys.push(i);
-        }
-    }
-    return ys;
-}
-
-function findXY(ps, qs, x, y) {
+function findCoordinate(ps, qs, x, y) {
     var xs = findAll(ps, x);
     var n = xs.length;
     var ys = new Array(n);
@@ -65,4 +54,15 @@ function findXY(ps, qs, x, y) {
         ys[i] = qs[xs[i]];
     }
     return findAll(ys, y).length === 0;
+}
+
+function calculateEdges(resolution, unit) {
+    var edges = new Array(resolution);
+    for (var i = 0; i < resolution; i++) {
+        edges[i] = i * unit;
+    }
+    return {
+        edges: edges,
+        target: permute(edges, edges),
+    };
 }
