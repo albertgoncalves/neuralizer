@@ -8,8 +8,8 @@ function affectGrid(state, unit, x, y) {
     state.xs.push(x);
     state.ys.push(y);
     state.labels.push(state.selection[0].value);
-    createCircle(state.containerId, unit / 2, x, y, state.selection[0].hsl,
-                 "circle-" + x + "-" + y);
+    createCircle(state.containerId, unit / 2, "circle-" + x + "-" + y, x, y,
+                 state.selection[0].hsl);
 }
 
 function clickGrid(state, unit, gridId) {
@@ -121,8 +121,8 @@ function main() {
         for (var j = 0; j < resolution; j++) {
             x = state.terrain.edges[i];
             y = state.terrain.edges[j];
-            createSquare(state.containerId, unit, x, y, color.white.hsl,
-                         gridId(x, y));
+            createSquare(state.containerId, unit, gridId(x, y), x, y,
+                         color.white.hsl);
         }
     }
     document.onmouseup = function(e) {

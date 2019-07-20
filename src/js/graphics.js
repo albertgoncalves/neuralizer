@@ -8,17 +8,17 @@ function textColor(id, color) {
     document.getElementById(id).style.color = color;
 }
 
-function createSvg(containerId, svgShape, attributes) {
-    var newSvg = document.createElementNS(W3, svgShape);
+function createSvg(id, shape, attributes) {
+    var svg = document.createElementNS(W3, shape);
     var n = attributes.length;
     for (var i = 0; i < n; i++) {
-        newSvg.setAttribute(attributes[i][0], attributes[i][1]);
+        svg.setAttribute(attributes[i][0], attributes[i][1]);
     }
-    document.getElementById(containerId).appendChild(newSvg);
+    document.getElementById(id).appendChild(svg);
 }
 
-function createSquare(containerId, unit, x, y, color, id) {
-    var squareAttributes = [
+function createSquare(containerId, unit, id, x, y, color) {
+    var attributes = [
         ["id", id],
         ["x", x],
         ["y", y],
@@ -27,11 +27,11 @@ function createSquare(containerId, unit, x, y, color, id) {
         ["fill", color],
         ["opacity", 0.45],
     ];
-    createSvg(containerId, "rect", squareAttributes);
+    createSvg(containerId, "rect", attributes);
 }
 
-function createCircle(containerId, radius, x, y, color, id) {
-    var circleAttributes = [
+function createCircle(containerId, radius, id, x, y, color) {
+    var attributes = [
         ["id", id],
         ["cx", x + radius],
         ["cy", y + radius],
@@ -39,7 +39,7 @@ function createCircle(containerId, radius, x, y, color, id) {
         ["fill", color],
         ["opacity", 0.9],
     ];
-    createSvg(containerId, "circle", circleAttributes);
+    createSvg(containerId, "circle", attributes);
 }
 
 function checkGridId(id) {
