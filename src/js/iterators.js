@@ -39,11 +39,11 @@ function permute(xs, ys) {
     var m = ys.length;
     var ps = new Array(n * m);
     var qs = new Array(n * m);
-    for (var ix = 0; ix < n; ix++) {
-        for (var iy = 0; iy < m; iy++) {
-            var i = (m * ix) + iy;
-            ps[i] = xs[ix];
-            qs[i] = ys[iy];
+    for (var i = 0; i < n; i++) {
+        for (var j = 0; j < m; j++) {
+            var k = (m * i) + j;
+            ps[k] = xs[i];
+            qs[k] = ys[j];
         }
     }
     return {
@@ -113,7 +113,7 @@ function transpose(xs) {
     return ys;
 }
 
-function matrixWith(xs, f) {
+function matrixMap(xs, f) {
     var n = xs.length;
     var m = xs[0].length;
     var zs = new Array(n);
@@ -127,7 +127,7 @@ function matrixWith(xs, f) {
     return zs;
 }
 
-function zipMatrixArrayWith(xs, ys, f) {
+function zipRowArrayWith(xs, ys, f) {
     var n = xs.length;
     var m = xs[0].length;
     var zs = new Array(n);
@@ -141,16 +141,30 @@ function zipMatrixArrayWith(xs, ys, f) {
     return zs;
 }
 
+function zipColumnArrayWith(xs, ys, f) {
+    var n = xs.length;
+    var m = xs[0].length;
+    var zs = new Array(n);
+    for (var i = 0; i < n; i++) {
+        var z = new Array(m);
+        for (var j = 0; j < m; j++) {
+            z[j] = f(xs[i][j], ys[j]);
+        }
+        zs[i] = z;
+    }
+    return zs;
+}
+
 function zipElementsWith(xs, ys, f) {
     var n = xs.length;
     var m = xs[0].length;
     var zs = new Array(n);
-    for (var ix = 0; ix < n; ix++) {
+    for (var i = 0; i < n; i++) {
         var z = new Array(m);
-        for (var iy = 0; iy < m; iy++) {
-            z[iy] = f(xs[ix][iy], ys[ix][iy]);
+        for (var j = 0; j < m; j++) {
+            z[j] = f(xs[i][j], ys[i][j]);
         }
-        zs[ix] = z;
+        zs[i] = z;
     }
     return zs;
 }
