@@ -11,12 +11,13 @@ if [ ! -e node_modules/.bin/jshint ]; then
     npm install --save-dev jshint
 fi
 
-export PATH="$PWD/node_modules/.bin/:$PATH"
+export PATH=$PWD/node_modules/.bin/:$PATH
 export WD=$(pwd)
-export HTML_TIDY="$WD/.tidyrc"
+export HTML_TIDY=$WD/.tidyrc
 
 fmt () {
     tidy -q -m $WD/src/index.html
+    sed -i 's/[ \t]\+$//' "$WD/src/index.html"
     for f in $WD/src/js/*.js; do
         echo $f
         clang-format -i $f
