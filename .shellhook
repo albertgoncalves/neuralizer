@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+set -eu
+
 if [ $(uname -s) = "Darwin" ]; then
     alias ls='ls --color=auto'
     alias ll='ls -l'
@@ -24,6 +26,25 @@ fmt () {
     done
 }
 
+lint () {
+    jshint $WD/src/js/
+    x=$(jshint -c $WD/.jshint --show-non-errors $WD/src/js/main.js)
+    ys=$(
+        printf "$x" | gawk '
+            x == 1 { { gsub(/:/, "", $1) } print $1 }
+            /Implied globals:/ { x = 1 }
+        '
+    )
+    printf "%s\n\n" "$x"
+    for f in $WD/src/js/*.js; do
+        echo $f
+        for y in $ys; do
+            grep --color=auto -n $y $f
+        done
+        echo ""
+    done
+}
+
 search () {
     for f in $WD/src/js/*.js; do
         echo $f
@@ -33,8 +54,7 @@ search () {
 }
 
 export -f fmt
+export -f lint
 export -f search
-alias jshint="
-    jshint -c $WD/.jshint --show-non-errors $WD/src/js/main.js
-    jshint $WD/src/js/
-"
+
+set +eu
