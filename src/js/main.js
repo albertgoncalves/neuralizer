@@ -34,8 +34,10 @@ for (var i = 0; i < 2; i++) {
     PREDCOLORMAP[LABELMAP[COLORSTATE[i].name]] = COLORSTATE[i].hsl;
 }
 var PARAMS = {
-    nHiddenDim: 4,
-    regLambda: 0.05,
+    inputDim: 2,
+    outputDim: 2,
+    hiddenDim: 4,
+    lambda: 0.05,
     epsilon: 0.05,
     nLoops: 100,
 };
@@ -87,6 +89,23 @@ function colorSwitch(key) {
     if (colorObj !== COLORSTATE[0]) {
         flipColors();
     }
+}
+
+function pipeline(xy, xs, ys, labels, labelMap, params) {
+    var xsNorm = normalize(xs);
+    var ysNorm = normalize(ys);
+    var trainX = zip(xsNorm.units, ysNorm.units);
+    var n = labels.length;
+    var trainY = new Array(n);
+    for (var i = 0; i < n; i++) {
+        trainY[i] = labelMap[labels[i]];
+    }
+    var testX = zip(unitScale(xy.xs, xsNorm.mu, xsNorm.sigma),
+                    unitScale(xy.ys, ysNorm.mu, ysNorm.sigma));
+    var testY = neuralNetwork(trainX, trainY, testX, params.inputDim,
+                              params.outputDim, params.hiddenDim,
+                              params.lambda, params.epsilon, params.nLoops);
+    return transpose([xy.xs, xy.ys, testY]);
 }
 
 function keyAction(key) {
