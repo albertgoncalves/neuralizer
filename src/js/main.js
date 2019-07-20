@@ -29,8 +29,8 @@ function mapColor(cell, color) {
     }
 }
 
-function gridId(x, y) {
-    return "grid-" + x + "-" + y;
+function rectId(x, y) {
+    return "rect-" + x + "-" + y;
 }
 
 function mapResult(cells, color) {
@@ -38,7 +38,7 @@ function mapResult(cells, color) {
     var cell;
     for (var i = 0; i < n; i++) {
         cell = cells[i];
-        document.getElementById(gridId(cell[0], cell[1])).style.fill =
+        document.getElementById(rectId(cell[0], cell[1])).style.fill =
             mapColor(cell[2], color);
     }
 }
@@ -135,13 +135,13 @@ function main() {
         for (var j = 0; j < resolution; j++) {
             x = state.cells.edges[i];
             y = state.cells.edges[j];
-            createSquare(state.container, unit, gridId(x, y), x, y,
+            createSquare(state.container, unit, rectId(x, y), x, y,
                          color.white.hsl);
         }
     }
     document.onmouseup = function(e) {
         var id = e.target.id;
-        if (id.indexOf("grid-") !== -1) {
+        if (id.indexOf("rect-") !== -1) {
             clickGrid(state, unit, id);
         }
     };
