@@ -27,23 +27,23 @@ function deltaSquare(x) {
 }
 
 function zipWeights(xs, ys, z) {
-    return zipElementsWith(xs, matrixMap(ys, mulConstant(z)), add);
+    return zipElementsWith(xs, mapMatrix(ys, mulConstant(z)), add);
 }
 
 function forward(result, model, trainX) {
     var alpha =
-        matrixMap(zipColumnArrayWith(dot(trainX, model.w1), model.b1[0], add),
+        mapMatrix(zipColumnArrayWith(dot(trainX, model.w1), model.b1[0], add),
                   Math.tanh);
-    var score = matrixMap(
+    var score = mapMatrix(
         zipColumnArrayWith(dot(alpha, model.w2), model.b2[0], add), Math.exp);
     result.prediction = zipRowArrayWith(score, flattenSum(score), div);
     result.alpha = alpha;
 }
 
 function backward(result, model, trainX, trainY, lambda, epsilon) {
-    var delta3 = zipWith(result.prediction, trainY, indexMap(subOne));
+    var delta3 = zipWith(result.prediction, trainY, mapIndex(subOne));
     var delta2 = zipElementsWith(dot(delta3, transpose(model.w2)),
-                                 matrixMap(result.alpha, deltaSquare), mul);
+                                 mapMatrix(result.alpha, deltaSquare), mul);
     model.w1 = zipWeights(
         model.w1, zipWeights(dot(transpose(trainX), delta2), model.w1, lambda),
         -epsilon);
@@ -58,12 +58,12 @@ function backward(result, model, trainX, trainY, lambda, epsilon) {
 function neuralNetwork(trainX, trainY, testX, inputDim, outputDim, hiddenDim,
                        lambda, epsilon, n) {
     var model = {
-        w1: matrixMap(matrixRange(inputDim, hiddenDim, randomSigned),
+        w1: mapMatrix(rangeMatrix(inputDim, hiddenDim, randomSigned),
                       divSqrt(inputDim)),
-        w2: matrixMap(matrixRange(hiddenDim, outputDim, randomSigned),
+        w2: mapMatrix(rangeMatrix(hiddenDim, outputDim, randomSigned),
                       divSqrt(hiddenDim)),
-        b1: matrixRange(1, hiddenDim, fillZero),
-        b2: matrixRange(1, outputDim, fillZero),
+        b1: rangeMatrix(1, hiddenDim, fillZero),
+        b2: rangeMatrix(1, outputDim, fillZero),
     };
     var result = {
         prediction: null,

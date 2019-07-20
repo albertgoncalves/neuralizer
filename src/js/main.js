@@ -17,7 +17,7 @@ function clickGrid(state, unit, id) {
     }
 }
 
-function resultMap(terrain, color) {
+function mapResult(terrain, color) {
     var n = terrain.length;
     var p;
     var q;
@@ -57,7 +57,7 @@ function keyAction(state, key, color) {
                                   state.outputDim, state.hiddenDim,
                                   state.lambda, state.epsilon, state.n);
         var result = [state.terrain.target.xs, state.terrain.target.ys, testY];
-        resultMap(transpose(result), color);
+        mapResult(transpose(result), color);
     } else if (key === state.keyPress.l) {
         location.reload();
     }
