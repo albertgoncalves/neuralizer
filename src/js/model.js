@@ -30,17 +30,6 @@ function zipWeights(xs, ys, z) {
     return zipElementsWith(xs, matrixMap(ys, mulConstant(z)), add);
 }
 
-function initialize(inputDim, outputDim, hiddenDim) {
-    return {
-        w1: matrixMap(matrixRange(inputDim, hiddenDim, randomSigned),
-                      divSqrt(inputDim)),
-        w2: matrixMap(matrixRange(hiddenDim, outputDim, randomSigned),
-                      divSqrt(hiddenDim)),
-        b1: matrixRange(1, hiddenDim, fillZero),
-        b2: matrixRange(1, outputDim, fillZero),
-    };
-}
-
 function forward(result, model, trainX) {
     var alpha =
         matrixMap(zipColumnArrayWith(dot(trainX, model.w1), model.b1[0], add),
@@ -68,7 +57,14 @@ function backward(model, trainX, trainY, result, lambda, epsilon) {
 
 function neuralNetwork(trainX, trainY, testX, inputDim, outputDim, hiddenDim,
                        lambda, epsilon, n) {
-    var model = initialize(inputDim, outputDim, hiddenDim);
+    var model = {
+        w1: matrixMap(matrixRange(inputDim, hiddenDim, randomSigned),
+                      divSqrt(inputDim)),
+        w2: matrixMap(matrixRange(hiddenDim, outputDim, randomSigned),
+                      divSqrt(hiddenDim)),
+        b1: matrixRange(1, hiddenDim, fillZero),
+        b2: matrixRange(1, outputDim, fillZero),
+    };
     var result = {
         prediction: null,
         alpha: null,
