@@ -31,7 +31,9 @@ lint () {
     x=$(jshint -c $WD/.jshint --show-non-errors $WD/src/js/main.js)
     ys=$(
         printf "$x" | awk '
-            x == 1 { { gsub(/:/, "", $1) } print $1 }
+            x == 1 && sprintf("%s %s", $1, $2) != "Unused Variables:" {
+                { gsub(/[:(].*/, "", $1) } print $1
+            }
             /Implied globals:/ { x = 1 }
         '
     )
