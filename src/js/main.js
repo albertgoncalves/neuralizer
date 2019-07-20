@@ -1,11 +1,7 @@
-function helpColor(state) {
-    textColor(state.selection[0].name, state.selection[0].hsl);
-    textColor(state.selection[1].name, "black");
-}
-
-function flipColors(state) {
-    state.selection = state.selection.reverse();
-    helpColor(state);
+function updateText(selection) {
+    textColor(selection[0].name, selection[0].hsl);
+    textColor(selection[1].name, "black");
+    textColor(selection[2].name, "black");
 }
 
 function affectGrid(state, unit, x, y) {
@@ -42,8 +38,16 @@ function resultMap(terrain, color) {
 
 function keyAction(state, key, color) {
     if (state.keyColor.hasOwnProperty(key)) {
-        if (state.keyColor[key] !== state.selection[0]) {
-            flipColors(state);
+        var selection = state.keyColor[key];
+        if (selection !== state.selection[0]) {
+            if (selection === color.red) {
+                state.selection = [color.red, color.blue, color.green];
+            } else if (selection === color.blue) {
+                state.selection = [color.blue, color.green, color.red];
+            } else {
+                state.selection = [color.green, color.red, color.blue];
+            }
+            updateText(state.selection);
         }
     } else if ((key === state.keyPress.n) && (state.xs.length > 0)) {
         var xs = normalize(state.xs);
@@ -103,7 +107,7 @@ function main() {
         ys: [],
         labels: [],
     };
-    helpColor(state);
+    updateText(state.selection);
     for (var i = 0; i < resolution; i++) {
         var x;
         var y;
