@@ -30,7 +30,7 @@ lint () {
     jshint $WD/src/js/
     x=$(jshint -c $WD/.jshint --show-non-errors $WD/src/js/main.js)
     ys=$(
-        printf "$x" | gawk '
+        printf "$x" | awk '
             x == 1 { { gsub(/:/, "", $1) } print $1 }
             /Implied globals:/ { x = 1 }
         '
