@@ -39,7 +39,7 @@ lint () {
     for f in $WD/src/js/*.js; do
         echo $f
         for y in $ys; do
-            grep --color=auto -n $y $f
+            grep --color=auto -n -w $y $f
         done
         echo ""
     done
@@ -48,7 +48,7 @@ lint () {
 search () {
     for f in $WD/src/js/*.js; do
         echo $f
-        grep --color=auto -n $1 $f
+        grep --color=auto -n -w $1 $f
         echo ""
     done
 }
