@@ -40,7 +40,7 @@ function forward(result, model, trainX) {
     result.alpha = alpha;
 }
 
-function backward(model, trainX, trainY, result, lambda, epsilon) {
+function backward(result, model, trainX, trainY, lambda, epsilon) {
     var delta3 = zipWith(result.prediction, trainY, indexMap(subOne));
     var delta2 = zipElementsWith(dot(delta3, transpose(model.w2)),
                                  matrixMap(result.alpha, deltaSquare), mul);
@@ -71,7 +71,7 @@ function neuralNetwork(trainX, trainY, testX, inputDim, outputDim, hiddenDim,
     };
     for (var _ = 0; _ < n; _++) {
         forward(result, model, trainX);
-        backward(model, trainX, trainY, result, lambda, epsilon);
+        backward(result, model, trainX, trainY, lambda, epsilon);
     }
     forward(result, model, testX);
     return argMax(result.prediction);
