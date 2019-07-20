@@ -51,15 +51,16 @@ function pressKey(state, key, color) {
             }
             updateText(state.color, state.color.index);
         }
-    } else if ((key === state.keyPress.n) && (state.xs.length > 0)) {
+    } else if ((key === state.key.n) && (state.xs.length > 0)) {
         var xs = normalize(state.xs);
         var ys = normalize(state.ys);
         var trainX = zip(xs.unit, ys.unit);
         var testX = zip(unitScale(state.terrain.target.xs, xs.mu, xs.sigma),
                         unitScale(state.terrain.target.ys, ys.mu, ys.sigma));
-        var testY = neuralNetwork(trainX, state.labels, testX, state.inputDim,
-                                  state.outputDim, state.hiddenDim,
-                                  state.lambda, state.epsilon, state.n);
+        var testY = neuralNetwork(trainX, state.labels, testX,
+                                  state.model.inputDim, state.model.outputDim,
+                                  state.model.hiddenDim, state.model.lambda,
+                                  state.model.epsilon, state.model.n);
         var result = [state.terrain.target.xs, state.terrain.target.ys, testY];
         mapResult(transpose(result), state.color);
     } else if (key === state.key.l) {
@@ -94,10 +95,12 @@ function main() {
     var resolution = Math.pow(2, 5);
     var unit = document.getElementById("figure").clientWidth / resolution;
     var state = {
-        containerId: "axis",
-        selection: [color.red, color.blue, color.green],
+        container: "axis",
         terrain: calculateEdges(resolution, unit),
-        keyPress: {
+        xs: [],
+        ys: [],
+        labels: [],
+        key: {
             l: 76,
             n: 78,
         },
@@ -120,15 +123,6 @@ function main() {
             epsilon: 0.05,
             n: 100,
         },
-        inputDim: 2,
-        outputDim: 3,
-        hiddenDim: 4,
-        lambda: 0.05,
-        epsilon: 0.05,
-        n: 100,
-        xs: [],
-        ys: [],
-        labels: [],
     };
     updateText(state.color, state.color.index);
     for (var i = 0; i < resolution; i++) {
@@ -137,7 +131,7 @@ function main() {
         for (var j = 0; j < resolution; j++) {
             x = state.terrain.edges[i];
             y = state.terrain.edges[j];
-            createSquare(state.containerId, unit, gridId(x, y), x, y,
+            createSquare(state.container, unit, gridId(x, y), x, y,
                          color.white.hsl);
         }
     }
@@ -149,7 +143,7 @@ function main() {
     };
     document.onkeydown = function(e) {
         if (e.keyCode) {
-            keyAction(state, e.keyCode, color);
+            pressKey(state, e.keyCode, color);
         }
     };
 }
