@@ -1,5 +1,5 @@
 function randomSigned() {
-    return 2 * Math.random() - 1;
+    return (2 * Math.random()) - 1;
 }
 
 function divSqrt(x) {

@@ -1,11 +1,7 @@
-function helpColor(state) {
-    textColor(state.selection[0].name, state.selection[0].hsl);
-    textColor(state.selection[1].name, "black");
-}
-
-function flipColors(state) {
-    state.selection = state.selection.reverse();
-    helpColor(state);
+function updateText(selection) {
+    textColor(selection[0].name, selection[0].hsl);
+    textColor(selection[1].name, "black");
+    textColor(selection[2].name, "black");
 }
 
 function affectGrid(state, unit, x, y) {
@@ -31,10 +27,14 @@ function resultMap(terrain, color) {
     var q;
     for (var i = 0; i < n; i++) {
         p = terrain[i];
-        if (p[2] === 0) {
+        if (p[2] === color.red.value) {
             q = color.red;
-        } else {
+        } else if (p[2] === color.green.value) {
+            q = color.green;
+        } else if (p[2] === color.blue.value) {
             q = color.blue;
+        } else {
+            q = color.white;
         }
         document.getElementById(gridId(p[0], p[1])).style.fill = q.hsl;
     }
@@ -42,8 +42,16 @@ function resultMap(terrain, color) {
 
 function keyAction(state, key, color) {
     if (state.keyColor.hasOwnProperty(key)) {
-        if (state.keyColor[key] !== state.selection[0]) {
-            flipColors(state);
+        var selection = state.keyColor[key];
+        if (selection !== state.selection[0]) {
+            if (selection === color.red) {
+                state.selection = [color.red, color.blue, color.green];
+            } else if (selection === color.blue) {
+                state.selection = [color.blue, color.green, color.red];
+            } else {
+                state.selection = [color.green, color.red, color.blue];
+            }
+            updateText(state.selection);
         }
     } else if ((key === state.keyPress.n) && (state.xs.length > 0)) {
         var xs = normalize(state.xs);
@@ -57,44 +65,50 @@ function keyAction(state, key, color) {
         var response =
             [state.terrain.target.xs, state.terrain.target.ys, testY];
         resultMap(transpose(response), color);
-    } else if (key === state.keyPress.y) {
+    } else if (key === state.keyPress.l) {
         location.reload();
     }
 }
 
 function main() {
     var color = {
-        blue: {
-            name: "blue",
-            hsl: "hsl(205, 85%, 65%)",
-            value: 1,
+        white: {
+            name: "white",
+            hsl: "hsl(0, 100%, 100%)",
         },
         red: {
             name: "red",
             hsl: "hsl(5, 95%, 75%)",
             value: 0,
         },
-        white: {
-            name: "white",
-            hsl: "hsl(0, 100%, 100%)",
+        green: {
+            name: "green",
+            hsl: "hsl(142, 40%, 50%)",
+            value: 1,
+        },
+        blue: {
+            name: "blue",
+            hsl: "hsl(205, 85%, 65%)",
+            value: 2,
         },
     };
     var resolution = Math.pow(2, 5);
     var unit = document.getElementById("figure").clientWidth / resolution;
     var state = {
         containerId: "axis",
-        selection: [color.red, color.blue],
+        selection: [color.red, color.blue, color.green],
         terrain: calculateEdges(resolution, unit),
         keyPress: {
-            y: 76,
+            l: 76,
             n: 78,
         },
         keyColor: {
-            66: color.blue,
             82: color.red,
+            71: color.green,
+            66: color.blue,
         },
         inputDim: 2,
-        outputDim: 2,
+        outputDim: 3,
         hiddenDim: 4,
         lambda: 0.05,
         epsilon: 0.05,
@@ -103,7 +117,7 @@ function main() {
         ys: [],
         labels: [],
     };
-    helpColor(state);
+    updateText(state.selection);
     for (var i = 0; i < resolution; i++) {
         var x;
         var y;
