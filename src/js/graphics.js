@@ -5,7 +5,10 @@ function gridId(x, y) {
 }
 
 function textColor(id, color) {
-    document.getElementById(id).style.color = color;
+    var element = document.getElementById(id);
+    if (element) {
+        element.style.color = color;
+    }
 }
 
 function createSvg(id, shape, attributes) {

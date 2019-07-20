@@ -1,7 +1,11 @@
-function updateText(selection) {
-    textColor(selection[0].name, selection[0].hsl);
-    textColor(selection[1].name, "black");
-    textColor(selection[2].name, "black");
+function updateText(color, i) {
+    for (var j = 0; j < color.n; j++) {
+        if (i === j) {
+            textColor(color.list[j].name, color.list[j].hsl);
+        } else {
+            textColor(color.list[j].name, "black");
+        }
+    }
 }
 
 function clickGrid(state, unit, id) {
@@ -11,41 +15,41 @@ function clickGrid(state, unit, id) {
     if (findCoordinate(state.xs, state.ys, x, y)) {
         state.xs.push(x);
         state.ys.push(y);
-        state.labels.push(state.selection[0].value);
-        createCircle(state.containerId, unit / 2, "circle-" + x + "-" + y, x,
-                     y, state.selection[0].hsl);
+        state.labels.push(state.color.index);
+        createCircle(state.container, unit / 2, "circle-" + x + "-" + y, x, y,
+                     state.color.list[state.color.index].hsl);
     }
 }
 
-function mapResult(terrain, color) {
-    var n = terrain.length;
-    var p;
-    var q;
-    for (var i = 0; i < n; i++) {
-        p = terrain[i];
-        if (p[2] === color.red.value) {
-            q = color.red;
-        } else if (p[2] === color.green.value) {
-            q = color.green;
-        } else {
-            q = color.blue;
+function mapColor(cell, color) {
+    for (var i = 0; i < color.n; i++) {
+        if (cell === i) {
+            return color.list[i].hsl;
         }
-        document.getElementById(gridId(p[0], p[1])).style.fill = q.hsl;
     }
 }
 
-function keyAction(state, key, color) {
-    if (state.keyColor.hasOwnProperty(key)) {
-        var selection = state.keyColor[key];
-        if (selection !== state.selection[0]) {
-            if (selection === color.red) {
-                state.selection = [color.red, color.blue, color.green];
-            } else if (selection === color.green) {
-                state.selection = [color.green, color.red, color.blue];
-            } else {
-                state.selection = [color.blue, color.green, color.red];
+function mapResult(cells, color) {
+    var n = cells.length;
+    var cell;
+    for (var i = 0; i < n; i++) {
+        cell = cells[i];
+        document.getElementById(gridId(cell[0], cell[1])).style.fill =
+            mapColor(cell[2], color);
+    }
+}
+
+function pressKey(state, key, color) {
+    if (state.color.key.hasOwnProperty(key)) {
+        var selection = state.color.key[key];
+        if (selection !== state.color.list[state.color.index]) {
+            for (var i = 0; i < state.color.n; i++) {
+                if (selection === state.color.list[i]) {
+                    state.color.index = i;
+                    break;
+                }
             }
-            updateText(state.selection);
+            updateText(state.color, state.color.index);
         }
     } else if ((key === state.keyPress.n) && (state.xs.length > 0)) {
         var xs = normalize(state.xs);
@@ -57,8 +61,8 @@ function keyAction(state, key, color) {
                                   state.outputDim, state.hiddenDim,
                                   state.lambda, state.epsilon, state.n);
         var result = [state.terrain.target.xs, state.terrain.target.ys, testY];
-        mapResult(transpose(result), color);
-    } else if (key === state.keyPress.l) {
+        mapResult(transpose(result), state.color);
+    } else if (key === state.key.l) {
         location.reload();
     }
 }
@@ -72,19 +76,21 @@ function main() {
         red: {
             name: "red",
             hsl: "hsl(5, 95%, 75%)",
-            value: 0,
         },
         green: {
             name: "green",
-            hsl: "hsl(142, 40%, 50%)",
-            value: 1,
+            hsl: "hsl(145, 40%, 50%)",
         },
         blue: {
             name: "blue",
             hsl: "hsl(205, 85%, 65%)",
-            value: 2,
+        },
+        orange: {
+            name: "orange",
+            hsl: "hsl(35, 85%, 65%)",
         },
     };
+    var colors = Object.values(color);
     var resolution = Math.pow(2, 5);
     var unit = document.getElementById("figure").clientWidth / resolution;
     var state = {
@@ -95,10 +101,24 @@ function main() {
             l: 76,
             n: 78,
         },
-        keyColor: {
-            82: color.red,
-            71: color.green,
-            66: color.blue,
+        color: {
+            index: 1,
+            n: colors.length,
+            list: colors,
+            key: {
+                82: color.red,
+                71: color.green,
+                66: color.blue,
+                79: color.orange,
+            },
+        },
+        model: {
+            inputDim: 2,
+            outputDim: colors.length,
+            hiddenDim: 4,
+            lambda: 0.05,
+            epsilon: 0.05,
+            n: 100,
         },
         inputDim: 2,
         outputDim: 3,
@@ -110,7 +130,7 @@ function main() {
         ys: [],
         labels: [],
     };
-    updateText(state.selection);
+    updateText(state.color, state.color.index);
     for (var i = 0; i < resolution; i++) {
         var x;
         var y;
