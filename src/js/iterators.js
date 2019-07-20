@@ -66,7 +66,7 @@ function matrixRange(n, m, f) {
     });
 }
 
-function applyIndexOnly(f) {
+function indexMap(f) {
     return function(xs, i) {
         var n = xs.length;
         var ys = new Array(n);
@@ -92,11 +92,11 @@ function indexMax(xs) {
 
 function argMax(xs) {
     var n = xs.length;
-    var ix = new Array(n);
+    var ys = new Array(n);
     for (var i = 0; i < n; i++) {
-        ix[i] = indexMax(xs[i]);
+        ys[i] = indexMax(xs[i]);
     }
-    return ix;
+    return ys;
 }
 
 function transpose(xs) {
