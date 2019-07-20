@@ -63,7 +63,7 @@ function permute(xs, ys) {
     };
 }
 
-function arrayRange(n, f) {
+function rangeArray(n, f) {
     var xs = new Array(n);
     for (var i = 0; i < n; i++) {
         xs[i] = f();
@@ -71,13 +71,13 @@ function arrayRange(n, f) {
     return xs;
 }
 
-function matrixRange(n, m, f) {
-    return arrayRange(n, function() {
-        return arrayRange(m, f);
+function rangeMatrix(n, m, f) {
+    return rangeArray(n, function() {
+        return rangeArray(m, f);
     });
 }
 
-function indexMap(f) {
+function mapIndex(f) {
     return function(xs, i) {
         var n = xs.length;
         var ys = new Array(n);
@@ -124,7 +124,7 @@ function transpose(xs) {
     return ys;
 }
 
-function matrixMap(xs, f) {
+function mapMatrix(xs, f) {
     var n = xs.length;
     var m = xs[0].length;
     var zs = new Array(n);
