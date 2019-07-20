@@ -29,6 +29,10 @@ function mapColor(cell, color) {
     }
 }
 
+function gridId(x, y) {
+    return "grid-" + x + "-" + y;
+}
+
 function mapResult(cells, color) {
     var n = cells.length;
     var cell;
@@ -129,15 +133,15 @@ function main() {
         var x;
         var y;
         for (var j = 0; j < resolution; j++) {
-            x = state.terrain.edges[i];
-            y = state.terrain.edges[j];
+            x = state.cells.edges[i];
+            y = state.cells.edges[j];
             createSquare(state.container, unit, gridId(x, y), x, y,
                          color.white.hsl);
         }
     }
     document.onmouseup = function(e) {
         var id = e.target.id;
-        if (checkGridId(id)) {
+        if (id.indexOf("grid-") !== -1) {
             clickGrid(state, unit, id);
         }
     };

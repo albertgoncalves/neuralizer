@@ -1,9 +1,3 @@
-var W3 = "http://www.w3.org/2000/svg";
-
-function gridId(x, y) {
-    return "grid-" + x + "-" + y;
-}
-
 function textColor(id, color) {
     var element = document.getElementById(id);
     if (element) {
@@ -12,7 +6,7 @@ function textColor(id, color) {
 }
 
 function createSvg(id, shape, attributes) {
-    var svg = document.createElementNS(W3, shape);
+    var svg = document.createElementNS("http://www.w3.org/2000/svg", shape);
     var n = attributes.length;
     for (var i = 0; i < n; i++) {
         svg.setAttribute(attributes[i][0], attributes[i][1]);
@@ -43,10 +37,6 @@ function createCircle(containerId, radius, id, x, y, color) {
         ["opacity", 0.9],
     ];
     createSvg(containerId, "circle", attributes);
-}
-
-function checkGridId(id) {
-    return id.indexOf("grid-") !== -1;
 }
 
 function findCoordinate(ps, qs, x, y) {
