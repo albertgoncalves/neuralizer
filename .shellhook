@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+set -eu
+
 if [ $(uname -s) = "Darwin" ]; then
     alias ls='ls --color=auto'
     alias ll='ls -l'
@@ -7,19 +9,52 @@ else
     alias open="xdg-open"
 fi
 
-if [ ! -e node_modules/.bin/jshint ]; then
+export WD=$(pwd)
+export PATH=$WD/node_modules/.bin/:$PATH
+export HTML_TIDY=$WD/.tidyrc
+
+if [ ! -e $WD/node_modules/.bin/jshint ]; then
     npm install --save-dev jshint
 fi
 
 fmt () {
-    for f in src/js/*.js; do
+    tidy -q -m $WD/src/index.html
+    sed -i 's/[ \t]\+$//' "$WD/src/index.html"
+    for f in $WD/src/js/*.js; do
         echo $f
-        jshint $f
         clang-format -i $f
     done
 }
 
-export PATH="$PWD/node_modules/.bin/:$PATH"
-export WD=$(pwd)
-export HTML_TIDY="$WD/.tidyrc"
+lint () {
+    jshint $WD/src/js/
+    x=$(jshint -c $WD/.jshint --show-non-errors $WD/src/js/main.js)
+    ys=$(
+        printf "$x" | awk '
+            x == 1 { { gsub(/:/, "", $1) } print $1 }
+            /Implied globals:/ { x = 1 }
+        '
+    )
+    printf "%s\n\n" "$x"
+    for f in $WD/src/js/*.js; do
+        echo $f
+        for y in $ys; do
+            grep --color=auto -n -w $y $f
+        done
+        echo ""
+    done
+}
+
+search () {
+    for f in $WD/src/js/*.js; do
+        echo $f
+        grep --color=auto -n -w $1 $f
+        echo ""
+    done
+}
+
 export -f fmt
+export -f lint
+export -f search
+
+set +eu

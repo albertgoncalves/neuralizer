@@ -1,0 +1,8 @@
+{
+    "prereq": [
+        "src/js/graphics.js",
+        "src/js/iterators.js",
+        "src/js/math.js",
+        "src/js/model.js"
+    ]
+}
