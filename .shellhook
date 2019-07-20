@@ -9,13 +9,13 @@ else
     alias open="xdg-open"
 fi
 
-if [ ! -e node_modules/.bin/jshint ]; then
+export WD=$(pwd)
+export PATH=$WD/node_modules/.bin/:$PATH
+export HTML_TIDY=$WD/.tidyrc
+
+if [ ! -e $WD/node_modules/.bin/jshint ]; then
     npm install --save-dev jshint
 fi
-
-export PATH=$PWD/node_modules/.bin/:$PATH
-export WD=$(pwd)
-export HTML_TIDY=$WD/.tidyrc
 
 fmt () {
     tidy -q -m $WD/src/index.html
