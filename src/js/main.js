@@ -59,13 +59,13 @@ function pressKey(state, key, color) {
         var xs = normalize(state.xs);
         var ys = normalize(state.ys);
         var trainX = zip(xs.unit, ys.unit);
-        var testX = zip(unitScale(state.terrain.target.xs, xs.mu, xs.sigma),
-                        unitScale(state.terrain.target.ys, ys.mu, ys.sigma));
+        var testX = zip(unitScale(state.cells.target.xs, xs.mu, xs.sigma),
+                        unitScale(state.cells.target.ys, ys.mu, ys.sigma));
         var testY = neuralNetwork(trainX, state.labels, testX,
                                   state.model.inputDim, state.model.outputDim,
                                   state.model.hiddenDim, state.model.lambda,
                                   state.model.epsilon, state.model.n);
-        var result = [state.terrain.target.xs, state.terrain.target.ys, testY];
+        var result = [state.cells.target.xs, state.cells.target.ys, testY];
         mapResult(transpose(result), state.color);
     } else if (key === state.key.l) {
         location.reload();
@@ -100,7 +100,7 @@ function main() {
     var unit = document.getElementById("figure").clientWidth / resolution;
     var state = {
         container: "axis",
-        terrain: calculateEdges(resolution, unit),
+        cells: calculateEdges(resolution, unit),
         xs: [],
         ys: [],
         labels: [],
