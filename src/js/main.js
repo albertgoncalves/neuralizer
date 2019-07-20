@@ -31,10 +31,8 @@ function resultMap(terrain, color) {
             q = color.red;
         } else if (p[2] === color.green.value) {
             q = color.green;
-        } else if (p[2] === color.blue.value) {
-            q = color.blue;
         } else {
-            q = color.white;
+            q = color.blue;
         }
         document.getElementById(gridId(p[0], p[1])).style.fill = q.hsl;
     }
@@ -46,10 +44,10 @@ function keyAction(state, key, color) {
         if (selection !== state.selection[0]) {
             if (selection === color.red) {
                 state.selection = [color.red, color.blue, color.green];
-            } else if (selection === color.blue) {
-                state.selection = [color.blue, color.green, color.red];
-            } else {
+            } else if (selection === color.green) {
                 state.selection = [color.green, color.red, color.blue];
+            } else {
+                state.selection = [color.blue, color.green, color.red];
             }
             updateText(state.selection);
         }
