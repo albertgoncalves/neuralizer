@@ -1,12 +1,12 @@
-# Neuralizer
+# neuralizer
 
 ![](cover.png)
 
 Simple point-and-click [neural network](https://en.wikipedia.org/wiki/Artificial_neural_network) based on [dennybritz/nn-from-scratch](https://github.com/dennybritz/nn-from-scratch/blob/master/nn_from_scratch.py).
 
 ---
-**Click** to add points, switch colors with `r` and `b`.
+**Click** to add points, switch colors with <kbd>r</kbd> <kbd>g</kbd> <kbd>b</kbd>.
 
-After creating some data, press `n` to deploy the neural network.
+After creating some data, <kbd>n</kbd> will deploy the neural network.
 
-Press `l` to reload the page.
+Reload the page with <kbd>l</kbd>.
