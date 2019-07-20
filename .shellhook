@@ -24,7 +24,16 @@ fmt () {
     done
 }
 
+search () {
+    for f in $WD/src/js/*.js; do
+        echo $f
+        grep --color=auto -n $1 $f
+        echo ""
+    done
+}
+
 export -f fmt
+export -f search
 alias jshint="
     jshint -c $WD/.jshint --show-non-errors $WD/src/js/main.js
     jshint $WD/src/js/
