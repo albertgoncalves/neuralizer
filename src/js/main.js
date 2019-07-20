@@ -23,7 +23,7 @@ var EDGES = new Array(RES);
 for (var i = 0; i < RES; i++) {
     EDGES[i] = i * UNIT;
 }
-var PREDEDGES = edgePermute(EDGES, EDGES);
+var PREDEDGES = permute(EDGES, EDGES);
 var COLORSTATE = [RED, BLUE];
 var LABELMAP = {
     "red": 0,

@@ -34,6 +34,24 @@ function sum(xs) {
     return s;
 }
 
+function permute(xs, ys) {
+    var n = xs.length;
+    var m = ys.length;
+    var ps = new Array(n * m);
+    var qs = new Array(n * m);
+    for (var ix = 0; ix < n; ix++) {
+        for (var iy = 0; iy < m; iy++) {
+            var i = (m * ix) + iy;
+            ps[i] = xs[ix];
+            qs[i] = ys[iy];
+        }
+    }
+    return {
+        xs: ps,
+        ys: qs,
+    };
+}
+
 function arrayRange(n, f) {
     var xs = new Array(n);
     for (var i = 0; i < n; i++) {

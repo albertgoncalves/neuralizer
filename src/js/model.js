@@ -2,9 +2,9 @@ function randomSigned() {
     return 2 * Math.random() - 1;
 }
 
-function divSqrt(y) {
-    return function(x) {
-        return x / Math.sqrt(y);
+function divSqrt(x) {
+    return function(y) {
+        return y / Math.sqrt(x);
     };
 }
 
@@ -12,9 +12,9 @@ function fillZero() {
     return 0;
 }
 
-function mulConstant(c) {
-    return function(x) {
-        return x * c;
+function mulConstant(x) {
+    return function(y) {
+        return x * y;
     };
 }
 
@@ -24,6 +24,10 @@ function subOne(x) {
 
 function deltaSquare(x) {
     return 1 - Math.pow(x, 2);
+}
+
+function zipWeights(xs, ys, z) {
+    return zipElementsWith(xs, matrixWith(ys, mulConstant(z)), add);
 }
 
 function initialize(nInputDim, nOutputDim, nHiddenDim) {
@@ -62,10 +66,6 @@ function fwdProp(model, trainX) {
     };
 }
 
-function applyW(xs, c, d) {
-    return zipElementsWith(xs, matrixWith(d, mulConstant(c)), add);
-}
-
 function backProp(model, trainX, trainY, fp, regLambda, epsilon) {
     var delta3 = zipWith(fp.p, trainY, applyIndexOnly(subOne));
     var dw2 = dot(transpose(fp.a1), delta3);
@@ -74,12 +74,12 @@ function backProp(model, trainX, trainY, fp, regLambda, epsilon) {
     var delta2 = zipElementsWith(dot(delta3, transpose(model.w2)), mat_a1, mul);
     var dw1 = dot(transpose(trainX), delta2);
     var db1 = flattenSum(transpose(delta2));
-    dw2 = applyW(dw2, regLambda, model.w2);
-    dw1 = applyW(dw1, regLambda, model.w1);
-    model.w1 = applyW(model.w1, -epsilon, dw1);
-    model.w2 = applyW(model.w2, -epsilon, dw2);
-    model.b1 = applyW(model.b1, -epsilon, [db1]);
-    model.b2 = applyW(model.b2, -epsilon, [db2]);
+    dw2 = zipWeights(dw2, model.w2, regLambda);
+    dw1 = zipWeights(dw1, model.w1, regLambda);
+    model.w1 = zipWeights(model.w1, dw1, -epsilon);
+    model.w2 = zipWeights(model.w2, dw2, -epsilon);
+    model.b1 = zipWeights(model.b1, [db1], -epsilon);
+    model.b2 = zipWeights(model.b2, [db2], -epsilon);
 }
 
 function train(model, n, trainX, trainY, regLambda, epsilon) {
@@ -96,24 +96,6 @@ function predict(model, x) {
 function applyUnitScale(xUnit, yUnit, xs, ys) {
     return zip(unitScale(xs, xUnit.mu, xUnit.sigma),
                unitScale(ys, yUnit.mu, yUnit.sigma));
-}
-
-function edgePermute(xEdges, yEdges) {
-    var n = xEdges.length;
-    var m = yEdges.length;
-    var xs = new Array(n * m);
-    var ys = new Array(n * m);
-    for (var ix = 0; ix < n; ix++) {
-        for (var iy = 0; iy < m; iy++) {
-            var i = (m * ix) + iy;
-            xs[i] = xEdges[ix];
-            ys[i] = yEdges[iy];
-        }
-    }
-    return {
-        xs: xs,
-        ys: ys,
-    };
 }
 
 function pipeline(xy, xs, ys, labels, labelMap, params) {
