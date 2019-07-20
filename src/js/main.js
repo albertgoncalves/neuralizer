@@ -62,7 +62,7 @@ function clickGrid(gridId) {
     for (var i = 0; i < 2; i++) {
         xys[i] = Number(xy[i]);
     }
-    if (checkXY(XS, xys[0], YS, xys[1])) {
+    if (findXY(XS, YS, xys[0], xys[1])) {
         affectGrid(xys[0], xys[1]);
     }
 }

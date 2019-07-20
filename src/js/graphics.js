@@ -48,21 +48,21 @@ function checkGridId(id) {
 
 function findAll(xs, x) {
     var n = xs.length;
-    var ix = [];
+    var ys = [];
     for (i = 0; i < n; i++) {
         if (xs[i] === x) {
-            ix.push(i);
+            ys.push(i);
         }
     }
-    return ix;
+    return ys;
 }
 
-function checkXY(xs, x, ys, y) {
-    var ix = findAll(xs, x);
-    var n = ix.length;
-    var iy = new Array(n);
+function findXY(ps, qs, x, y) {
+    var xs = findAll(ps, x);
+    var n = xs.length;
+    var ys = new Array(n);
     for (var i = 0; i < n; i++) {
-        iy[i] = ys[ix[i]];
+        ys[i] = qs[xs[i]];
     }
-    return findAll(iy, y).length === 0;
+    return findAll(ys, y).length === 0;
 }
