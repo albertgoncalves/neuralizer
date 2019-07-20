@@ -4,20 +4,16 @@ function updateText(selection) {
     textColor(selection[2].name, "black");
 }
 
-function affectGrid(state, unit, x, y) {
-    state.xs.push(x);
-    state.ys.push(y);
-    state.labels.push(state.selection[0].value);
-    createCircle(state.containerId, unit / 2, "circle-" + x + "-" + y, x, y,
-                 state.selection[0].hsl);
-}
-
-function clickGrid(state, unit, gridId) {
-    var coordinate = gridId.match(/\d+/g);
+function clickGrid(state, unit, id) {
+    var coordinate = id.match(/\d+/g);
     var x = Number(coordinate[0]);
     var y = Number(coordinate[1]);
     if (findCoordinate(state.xs, state.ys, x, y)) {
-        affectGrid(state, unit, x, y);
+        state.xs.push(x);
+        state.ys.push(y);
+        state.labels.push(state.selection[0].value);
+        createCircle(state.containerId, unit / 2, "circle-" + x + "-" + y, x,
+                     y, state.selection[0].hsl);
     }
 }
 
@@ -126,9 +122,9 @@ function main() {
         }
     }
     document.onmouseup = function(e) {
-        var clickId = e.target.id;
-        if (checkGridId(clickId)) {
-            clickGrid(state, unit, clickId);
+        var id = e.target.id;
+        if (checkGridId(id)) {
+            clickGrid(state, unit, id);
         }
     };
     document.onkeydown = function(e) {
