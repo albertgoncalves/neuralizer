@@ -34,7 +34,7 @@ function sum(xs) {
     return s;
 }
 
-function findAll(xs, x) {
+function findAll(x, xs) {
     var n = xs.length;
     var ys = [];
     for (var i = 0; i < n; i++) {

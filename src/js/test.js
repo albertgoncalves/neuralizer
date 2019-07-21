@@ -27,8 +27,7 @@ test("iterators", function(t) {
     t.same(zip([1], [2]), [[1, 2]]);
     t.same(zipWith([1, 2], [3, 4], twoArg), [3, 8]);
     t.equal(zipWithSum([1, 2], [3, 4], twoArg), 11);
-    t.equal(sum([1, 2, 3]), 6);
-    t.same(findAll([1, 2, 3, 1], 1), [0, 3]);
+    t.same(findAll(1, [1, 2, 3, 1]), [0, 3]);
     t.same(permute([1, 2], [3, 4]), {
         xs: [1, 1, 2, 2],
         ys: [3, 4, 3, 4],
