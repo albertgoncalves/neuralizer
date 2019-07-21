@@ -1,5 +1,5 @@
 html, body {
-    font-family: Verdana, Geneva, sans-serif;
+    font-family: Courier New, monospace;
     padding: 0;
     margin: 0;
 }
@@ -26,17 +26,22 @@ div {
 }
 
 #help {
+    padding: 5px;
+    font-size: 20px;
     color: black;
-    padding: 10px;
-}
-
-#help p {
-    margin: 0px;
 }
 
 .hotkey {
-    font-size: 20px;
+    font-size: 21px;
     font-weight: bold;
-    font-family: Courier New, monospace;
-    color: black;
+}
+
+#help p {
+    margin: 5px;
+}
+
+#author p {
+    font-size: 16px;
+    padding: 0px;
+    margin: 0px;
 }
