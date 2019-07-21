@@ -1,19 +1,19 @@
 function zip(xs, ys) {
     var n = xs.length;
-    var xys = new Array(n);
+    var zs = new Array(n);
     for (var i = 0; i < n; i++) {
-        xys[i] = [xs[i], ys[i]];
+        zs[i] = [xs[i], ys[i]];
     }
-    return xys;
+    return zs;
 }
 
 function zipWith(xs, ys, f) {
     var n = xs.length;
-    var xys = new Array(n);
+    var zs = new Array(n);
     for (var i = 0; i < n; i++) {
-        xys[i] = f(xs[i], ys[i]);
+        zs[i] = f(xs[i], ys[i]);
     }
-    return xys;
+    return zs;
 }
 
 function zipWithSum(xs, ys, f) {
