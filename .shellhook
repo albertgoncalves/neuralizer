@@ -58,8 +58,10 @@ search () {
 }
 
 tap () {
+    x=$(pwd)
     cd $WD/src/js
     node test.js
+    cd $x
 }
 
 export -f fmt
