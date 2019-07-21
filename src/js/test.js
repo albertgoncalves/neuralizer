@@ -1,10 +1,13 @@
 /* jshint evil: true */
 
-var test = require("tape");
 var fs = require("fs");
-eval(fs.readFileSync("./iterators.js").toString());
-eval(fs.readFileSync("./math.js").toString());
-eval(fs.readFileSync("./graphics.js").toString());
+var test = require("tape");
+
+var imports = ["./iterators.js", "./math.js", "./graphics.js"];
+var n = imports.length;
+for (var i = 0; i < n; i++) {
+    eval(fs.readFileSync(imports[i]).toString());
+}
 
 test("iterators", function(t) {
     function noArg() {
