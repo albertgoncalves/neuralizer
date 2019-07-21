@@ -13,9 +13,11 @@ export WD=$(pwd)
 export PATH=$WD/node_modules/.bin/:$PATH
 export HTML_TIDY=$WD/.tidyrc
 
-if [ ! -e $WD/node_modules/.bin/jshint ]; then
-    npm install --save-dev jshint
-fi
+for x in jshint tape; do
+    if [ ! -e $WD/node_modules/.bin/$x ]; then
+        npm install --save-dev $x
+    fi
+done
 
 fmt () {
     tidy -q -m $WD/src/index.html
@@ -55,8 +57,14 @@ search () {
     done
 }
 
+tap () {
+    cd $WD/src/js
+    node test.js
+}
+
 export -f fmt
 export -f lint
 export -f search
+export -f tap
 
 set +eu
