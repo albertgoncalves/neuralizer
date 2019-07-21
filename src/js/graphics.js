@@ -40,13 +40,13 @@ function createCircle(containerId, radius, id, x, y, color) {
 }
 
 function emptyCoordinate(ps, qs, x, y) {
-    var xs = findAll(ps, x);
+    var xs = findAll(x, ps);
     var n = xs.length;
     var ys = new Array(n);
     for (var i = 0; i < n; i++) {
         ys[i] = qs[xs[i]];
     }
-    return findAll(ys, y).length === 0;
+    return findAll(y, ys).length === 0;
 }
 
 function calculateEdges(resolution, unit) {

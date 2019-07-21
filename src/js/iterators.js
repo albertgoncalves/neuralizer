@@ -25,16 +25,7 @@ function zipWithSum(xs, ys, f) {
     return s;
 }
 
-function sum(xs) {
-    var n = xs.length;
-    var s = 0;
-    for (var i = 0; i < n; i++) {
-        s += xs[i];
-    }
-    return s;
-}
-
-function findAll(xs, x) {
+function findAll(x, xs) {
     var n = xs.length;
     var ys = [];
     for (var i = 0; i < n; i++) {
@@ -50,9 +41,10 @@ function permute(xs, ys) {
     var m = ys.length;
     var ps = new Array(n * m);
     var qs = new Array(n * m);
+    var k;
     for (var i = 0; i < n; i++) {
         for (var j = 0; j < m; j++) {
-            var k = (m * i) + j;
+            k = (m * i) + j;
             ps[k] = xs[i];
             qs[k] = ys[j];
         }
@@ -63,18 +55,16 @@ function permute(xs, ys) {
     };
 }
 
-function rangeArray(n, f) {
+function rangeMatrix(n, m, f) {
     var xs = new Array(n);
     for (var i = 0; i < n; i++) {
-        xs[i] = f();
+        var ys = new Array(m);
+        for (var j = 0; j < m; j++) {
+            ys[j] = f();
+        }
+        xs[i] = ys;
     }
     return xs;
-}
-
-function rangeMatrix(n, m, f) {
-    return rangeArray(n, function() {
-        return rangeArray(m, f);
-    });
 }
 
 function mapIndex(f) {
@@ -114,8 +104,9 @@ function transpose(xs) {
     var n = xs[0].length;
     var m = xs.length;
     var ys = new Array(n);
+    var y;
     for (var i = 0; i < n; i++) {
-        var y = new Array(m);
+        y = new Array(m);
         for (var j = 0; j < m; j++) {
             y[j] = xs[j][i];
         }
@@ -127,23 +118,25 @@ function transpose(xs) {
 function mapMatrix(xs, f) {
     var n = xs.length;
     var m = xs[0].length;
-    var zs = new Array(n);
+    var ys = new Array(n);
+    var y;
     for (var i = 0; i < n; i++) {
-        var z = new Array(m);
+        y = new Array(m);
         for (var j = 0; j < m; j++) {
-            z[j] = f(xs[i][j]);
+            y[j] = f(xs[i][j]);
         }
-        zs[i] = z;
+        ys[i] = y;
     }
-    return zs;
+    return ys;
 }
 
 function zipRowArrayWith(xs, ys, f) {
     var n = xs.length;
     var m = xs[0].length;
     var zs = new Array(n);
+    var z;
     for (var i = 0; i < n; i++) {
-        var z = new Array(m);
+        z = new Array(m);
         for (var j = 0; j < m; j++) {
             z[j] = f(xs[i][j], ys[i]);
         }
@@ -156,8 +149,9 @@ function zipColumnArrayWith(xs, ys, f) {
     var n = xs.length;
     var m = xs[0].length;
     var zs = new Array(n);
+    var z;
     for (var i = 0; i < n; i++) {
-        var z = new Array(m);
+        z = new Array(m);
         for (var j = 0; j < m; j++) {
             z[j] = f(xs[i][j], ys[j]);
         }
@@ -170,8 +164,9 @@ function zipElementsWith(xs, ys, f) {
     var n = xs.length;
     var m = xs[0].length;
     var zs = new Array(n);
+    var z;
     for (var i = 0; i < n; i++) {
-        var z = new Array(m);
+        z = new Array(m);
         for (var j = 0; j < m; j++) {
             z[j] = f(xs[i][j], ys[i][j]);
         }
@@ -182,9 +177,15 @@ function zipElementsWith(xs, ys, f) {
 
 function flattenSum(xs) {
     var n = xs.length;
+    var m = xs[0].length;
     var ys = new Array(n);
+    var s;
     for (var i = 0; i < n; i++) {
-        ys[i] = sum(xs[i]);
+        s = 0;
+        for (var j = 0; j < m; j++) {
+            s += xs[i][j];
+        }
+        ys[i] = s;
     }
     return ys;
 }
@@ -194,8 +195,9 @@ function dot(xs, ys) {
     var n = xs.length;
     var m = ts.length;
     var zs = new Array(n);
+    var z;
     for (var i = 0; i < n; i++) {
-        var z = new Array(m);
+        z = new Array(m);
         for (var j = 0; j < m; j++) {
             z[j] = zipWithSum(xs[i], ts[j], mul);
         }

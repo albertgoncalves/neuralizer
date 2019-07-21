@@ -1,13 +1,13 @@
-function add(a, b) {
-    return a + b;
+function add(x, y) {
+    return x + y;
 }
 
-function mul(a, b) {
-    return a * b;
+function mul(x, y) {
+    return x * y;
 }
 
-function div(a, b) {
-    return a / b;
+function div(x, y) {
+    return x / y;
 }
 
 function mean(xs) {
