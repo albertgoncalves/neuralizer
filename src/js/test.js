@@ -3,22 +3,27 @@
 var fs = require("fs");
 var test = require("tape");
 
-var imports = ["./iterators.js", "./math.js", "./graphics.js"];
-var n = imports.length;
-for (var i = 0; i < n; i++) {
-    eval(fs.readFileSync(imports[i]).toString());
+function readFile(path) {
+    return fs.readFileSync(path).toString();
 }
+
+eval(readFile("./iterators.js"));
+eval(readFile("./math.js"));
+eval(readFile("./graphics.js"));
 
 test("iterators", function(t) {
     function noArg() {
         return 0;
     }
+
     function oneArg(x) {
         return x * 2;
     }
+
     function twoArg(x, y) {
         return x * y;
     }
+
     t.same(zip([1], [2]), [[1, 2]]);
     t.same(zipWith([1, 2], [3, 4], twoArg), [3, 8]);
     t.equal(zipWithSum([1, 2], [3, 4], twoArg), 11);
