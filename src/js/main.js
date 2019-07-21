@@ -12,7 +12,7 @@ function clickGrid(state, unit, id) {
     var coordinate = id.match(/\d+/g);
     var x = Number(coordinate[0]);
     var y = Number(coordinate[1]);
-    if (findCoordinate(state.xs, state.ys, x, y)) {
+    if (emptyCoordinate(state.xs, state.ys, x, y)) {
         state.xs.push(x);
         state.ys.push(y);
         state.labels.push(state.color.index);

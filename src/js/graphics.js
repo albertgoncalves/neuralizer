@@ -39,7 +39,7 @@ function createCircle(containerId, radius, id, x, y, color) {
     createSvg(containerId, "circle", attributes);
 }
 
-function findCoordinate(ps, qs, x, y) {
+function emptyCoordinate(ps, qs, x, y) {
     var xs = findAll(ps, x);
     var n = xs.length;
     var ys = new Array(n);
