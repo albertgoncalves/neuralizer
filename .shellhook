@@ -52,7 +52,7 @@ lint () {
 search () {
     for f in $WD/src/js/*.js; do
         echo $f
-        grep --color=auto -n -w $1 $f
+        grep --color=auto -n $1 $f
         echo ""
     done
 }
