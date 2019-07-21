@@ -32,7 +32,6 @@ test("iterators", function(t) {
         xs: [1, 1, 2, 2],
         ys: [3, 4, 3, 4],
     });
-    t.same(rangeArray(3, noArg), [0, 0, 0]);
     t.same(rangeMatrix(3, 2, noArg), [[0, 0], [0, 0], [0, 0]]);
     t.same(mapIndex(oneArg)([0, 1, 2], 2), [0, 1, 4]);
     t.equal(indexMax([1, 2, 3, 1]), 2);

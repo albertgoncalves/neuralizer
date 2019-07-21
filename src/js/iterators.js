@@ -55,18 +55,16 @@ function permute(xs, ys) {
     };
 }
 
-function rangeArray(n, f) {
+function rangeMatrix(n, m, f) {
     var xs = new Array(n);
     for (var i = 0; i < n; i++) {
-        xs[i] = f();
+        var ys = new Array(m);
+        for (var j = 0; j < m; j++) {
+            ys[j] = f();
+        }
+        xs[i] = ys;
     }
     return xs;
-}
-
-function rangeMatrix(n, m, f) {
-    return rangeArray(n, function() {
-        return rangeArray(m, f);
-    });
 }
 
 function mapIndex(f) {
