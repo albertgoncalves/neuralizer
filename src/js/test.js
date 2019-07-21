@@ -16,8 +16,8 @@ test("iterators", function(t) {
     function oneArg(x) {
         return x * 2;
     }
-    function twoArg(a, b) {
-        return a * b;
+    function twoArg(x, y) {
+        return x * y;
     }
     t.same(zip([1], [2]), [[1, 2]]);
     t.same(zipWith([1, 2], [3, 4], twoArg), [3, 8]);
@@ -50,7 +50,7 @@ test("iterators", function(t) {
 
 test("math", function(t) {
     t.equal(mean([1, 2, 3]), 2);
-    t.same(Math.round(std([0, 1, 2], 1) * 1000) / 1000, 0.816);
+    t.equal(Math.round(std([0, 1, 2], 1) * 1000) / 1000, 0.816);
     t.end();
 });
 
