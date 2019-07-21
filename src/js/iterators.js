@@ -25,15 +25,6 @@ function zipWithSum(xs, ys, f) {
     return s;
 }
 
-function sum(xs) {
-    var n = xs.length;
-    var s = 0;
-    for (var i = 0; i < n; i++) {
-        s += xs[i];
-    }
-    return s;
-}
-
 function findAll(x, xs) {
     var n = xs.length;
     var ys = [];
@@ -182,9 +173,15 @@ function zipElementsWith(xs, ys, f) {
 
 function flattenSum(xs) {
     var n = xs.length;
+    var m = xs[0].length;
     var ys = new Array(n);
+    var s;
     for (var i = 0; i < n; i++) {
-        ys[i] = sum(xs[i]);
+        s = 0;
+        for (var j = 0; j < m; j++) {
+            s += xs[i][j];
+        }
+        ys[i] = s;
     }
     return ys;
 }
