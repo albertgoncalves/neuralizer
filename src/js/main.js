@@ -21,14 +21,6 @@ function clickGrid(state, unit, id) {
     }
 }
 
-function mapColor(cell, color) {
-    for (var i = 0; i < color.n; i++) {
-        if (cell === i) {
-            return color.list[i].hsl;
-        }
-    }
-}
-
 function rectId(x, y) {
     return "rect-" + x + "-" + y;
 }
@@ -38,8 +30,13 @@ function mapResult(cells, color) {
     var cell;
     for (var i = 0; i < n; i++) {
         cell = cells[i];
-        document.getElementById(rectId(cell[0], cell[1])).style.fill =
-            mapColor(cell[2], color);
+        for (var j = 0; j < color.n; j++) {
+            if (cell[2] === j) {
+                document.getElementById(rectId(cell[0], cell[1])).style.fill =
+                    color.list[j].hsl;
+                break;
+            }
+        }
     }
 }
 
