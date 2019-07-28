@@ -2,38 +2,39 @@
 
 set -eu
 
-if [ $(uname -s) = "Darwin" ]; then
+if [ "$(uname -s)" = "Darwin" ]; then
     alias ls='ls --color=auto'
     alias ll='ls -l'
 else
     alias open="xdg-open"
 fi
 
-export WD=$(pwd)
+export WD
+WD=$(pwd)
 export PATH=$WD/node_modules/.bin/:$PATH
 export HTML_TIDY=$WD/.tidyrc
 
 for x in jshint tape; do
-    if [ ! -e $WD/node_modules/.bin/$x ]; then
+    if [ ! -e "$WD/node_modules/.bin/$x" ]; then
         npm install --save-dev $x
     fi
 done
 
 fmt () {
-    tidy -q -m $WD/src/index.html
+    tidy -q -m "$WD/src/index.html"
     sed -i 's/[ \t]\+$//' "$WD/src/index.html"
-    for f in $WD/src/js/*.js; do
-        echo $f
-        clang-format -i $f
+    for f in "$WD"/src/js/*.js; do
+        echo "$f"
+        clang-format -i "$f"
     done
 }
 
 
 lint () {
-    jshint $WD/src/js/
-    x=$(jshint -c $WD/.jshint --show-non-errors $WD/src/js/main.js)
+    jshint "$WD/src/js/"
+    x=$(jshint -c "$WD/.jshint" --show-non-errors "$WD/src/js/main.js")
     ys=$(
-        printf "$x" | awk '
+        printf "%s" "$x" | awk '
             BEGIN { x = 0 }
             { y = ($1 " " $2) }
             x == 1 && y != "Implied globals:" && y != "Unused Variables:"
@@ -43,28 +44,28 @@ lint () {
         ' | sed -e 's/^[ \t]*//'
     )
     printf "%s\n\n" "$x"
-    for f in $WD/src/js/*.js; do
-        echo $f
+    for f in "$WD"/src/js/*.js; do
+        echo "$f"
         for y in $ys; do
-            grep --color=auto -n -w $y $f
+            grep --color=auto -n -w "$y" "$f"
         done
         echo ""
     done
 }
 
 search () {
-    for f in $WD/src/js/*.js; do
-        echo $f
-        grep --color=auto -n $1 $f
+    for f in "$WD"/src/js/*.js; do
+        echo "$f"
+        grep --color=auto -n "$1" "$f"
         echo ""
     done
 }
 
 tap () {
     x=$(pwd)
-    cd $WD/src/js
+    cd "$WD/src/js"
     node test.js | awk '/^[^ok]/'
-    cd $x
+    cd "$x"
 }
 
 export -f fmt
