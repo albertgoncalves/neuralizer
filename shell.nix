@@ -1,6 +1,5 @@
-{ pkgs ? import <nixpkgs> {} }:
-with pkgs; mkShell {
-    name = "neuralizer";
+with import <nixpkgs> {};
+mkShell {
     buildInputs = [
         clang-tools
         htmlTidy
