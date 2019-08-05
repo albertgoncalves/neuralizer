@@ -29,7 +29,6 @@ fmt () {
     done
 }
 
-
 lint () {
     jshint "$WD/src/js/"
     x=$(jshint -c "$WD/.jshint" --show-non-errors "$WD/src/js/main.js")
