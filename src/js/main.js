@@ -40,7 +40,7 @@ function mapResult(cells, color) {
     }
 }
 
-function pressKey(state, key, color) {
+function pressKey(state, key) {
     if (state.color.key.hasOwnProperty(key)) {
         var selection = state.color.key[key];
         if (selection !== state.color.list[state.color.index]) {
@@ -55,15 +55,15 @@ function pressKey(state, key, color) {
     } else if ((key === state.key.n) && (state.xs.length > 0)) {
         var xs = normalize(state.xs);
         var ys = normalize(state.ys);
-        var trainX = zip(xs.unit, ys.unit);
         var testX = zip(unitScale(state.cells.target.xs, xs.mu, xs.sigma),
                         unitScale(state.cells.target.ys, ys.mu, ys.sigma));
-        var testY = neuralNetwork(trainX, state.labels, testX,
+        var testY = neuralNetwork(zip(xs.unit, ys.unit), state.labels, testX,
                                   state.model.inputDim, state.model.outputDim,
                                   state.model.hiddenDim, state.model.lambda,
                                   state.model.epsilon, state.model.n);
-        var result = [state.cells.target.xs, state.cells.target.ys, testY];
-        mapResult(transpose(result), state.color);
+        mapResult(
+            transpose([state.cells.target.xs, state.cells.target.ys, testY]),
+            state.color);
     } else if (key === state.key.l) {
         location.reload();
     }
@@ -144,7 +144,7 @@ function main() {
     };
     document.onkeydown = function(e) {
         if (e.keyCode) {
-            pressKey(state, e.keyCode, color);
+            pressKey(state, e.keyCode);
         }
     };
 }
