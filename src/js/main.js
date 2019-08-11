@@ -58,9 +58,7 @@ function pressKey(state, key) {
         var testX = zip(unitScale(state.cells.target.xs, xs.mu, xs.sigma),
                         unitScale(state.cells.target.ys, ys.mu, ys.sigma));
         var testY = neuralNetwork(zip(xs.unit, ys.unit), state.labels, testX,
-                                  state.model.inputDim, state.model.outputDim,
-                                  state.model.hiddenDim, state.model.lambda,
-                                  state.model.epsilon, state.model.n);
+                                  state.params);
         mapResult(
             transpose([state.cells.target.xs, state.cells.target.ys, testY]),
             state.color);
@@ -116,7 +114,7 @@ function main() {
                 79: color.orange,
             },
         },
-        model: {
+        params: {
             inputDim: 2,
             outputDim: colors.length,
             hiddenDim: 4,

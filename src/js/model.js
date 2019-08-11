@@ -55,23 +55,36 @@ function backward(result, model, trainX, trainY, lambda, epsilon) {
     model.b2 = zipWeights(model.b2, [flattenSum(transpose(delta3))], -epsilon);
 }
 
-function neuralNetwork(trainX, trainY, testX, inputDim, outputDim, hiddenDim,
-                       lambda, epsilon, n) {
+function neuralNetwork(trainX, trainY, testX, params) {
+    /*  trainX: [[float]]
+     *  trainY: [float]
+     *  testX: [[float]]
+     *  params: {
+     *      inputDim: int,
+     *      outputDim: int,
+     *      hiddenDim: int,
+     *      lambda: float,
+     *      epsilon: float,
+     *      n: int,
+     *  }
+     */
     var model = {
-        w1: mapMatrix(rangeMatrix(inputDim, hiddenDim, randomSigned),
-                      divSqrt(inputDim)),
-        w2: mapMatrix(rangeMatrix(hiddenDim, outputDim, randomSigned),
-                      divSqrt(hiddenDim)),
-        b1: rangeMatrix(1, hiddenDim, fillZero),
-        b2: rangeMatrix(1, outputDim, fillZero),
+        w1: mapMatrix(
+            rangeMatrix(params.inputDim, params.hiddenDim, randomSigned),
+            divSqrt(params.inputDim)),
+        w2: mapMatrix(
+            rangeMatrix(params.hiddenDim, params.outputDim, randomSigned),
+            divSqrt(params.hiddenDim)),
+        b1: rangeMatrix(1, params.hiddenDim, fillZero),
+        b2: rangeMatrix(1, params.outputDim, fillZero),
     };
     var result = {
         prediction: null,
         alpha: null,
     };
-    for (var _ = 0; _ < n; _++) {
+    for (var _ = 0; _ < params.n; _++) {
         forward(result, model, trainX);
-        backward(result, model, trainX, trainY, lambda, epsilon);
+        backward(result, model, trainX, trainY, params.lambda, params.epsilon);
     }
     forward(result, model, testX);
     return argMax(result.prediction);
