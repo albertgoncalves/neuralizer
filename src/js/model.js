@@ -57,17 +57,16 @@ function backward(result, model, trainX, trainY, lambda, epsilon) {
 
 function neuralNetwork(trainX, trainY, testX, params) {
     /*  trainX: [[float]]
-     *  trainY: [float]
-     *  testX: [[float]]
-     *  params: {
-     *      inputDim: int,
-     *      outputDim: int,
-     *      hiddenDim: int,
-     *      lambda: float,
-     *      epsilon: float,
-     *      n: int,
-     *  }
-     */
+        trainY: [float]
+        testX: [[float]]
+        params: {
+            inputDim: int,
+            outputDim: int,
+            hiddenDim: int,
+            lambda: float,
+            epsilon: float,
+            n: int,
+        } */
     var model = {
         w1: mapMatrix(
             rangeMatrix(params.inputDim, params.hiddenDim, randomSigned),
