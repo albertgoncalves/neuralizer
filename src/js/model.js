@@ -1,3 +1,9 @@
+"use strict";
+
+/*  global add, argMax, div, dot, flattenSum, mapIndex, mapMatrix, mul,
+        rangeMatrix, transpose, zipElementsWith, zipColumnArrayWith,
+        zipRowArrayWith, zipWith */
+
 function randomSigned() {
     return (2 * Math.random()) - 1;
 }

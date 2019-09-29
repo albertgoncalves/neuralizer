@@ -21,55 +21,27 @@ for x in jshint tape; do
 done
 
 fmt () {
+    wd=$(pwd)
+    cd "$WD" || exit
     tidy -q -m "$WD/src/index.html"
     sed -i 's/[ \t]\+$//' "$WD/src/index.html"
     for f in "$WD"/src/js/*.js; do
         echo "$f"
         clang-format -i "$f"
     done
-}
-
-lint () {
-    jshint "$WD/src/js/"
-    x=$(jshint -c "$WD/.jshint" --show-non-errors "$WD/src/js/main.js")
-    ys=$(
-        printf "%s" "$x" | awk '
-            BEGIN { x = 0 }
-            { y = ($1 " " $2) }
-            x == 1 && y != "Implied globals:" && y != "Unused Variables:"
-            /Implied globals|Unused Variables/ { x = 1 }
-        ' | awk '
-            { { gsub(/(\(|:)(.*)/, "", $0) } print $0 }
-        ' | sed -e 's/^[ \t]*//'
-    )
-    printf "%s\n\n" "$x"
-    for f in "$WD"/src/js/*.js; do
-        echo "$f"
-        for y in $ys; do
-            grep --color=auto -n -w "$y" "$f"
-        done
-        echo ""
-    done
-}
-
-search () {
-    for f in "$WD"/src/js/*.js; do
-        echo "$f"
-        grep --color=auto -n "$1" "$f"
-        echo ""
-    done
+    cd "$wd" || exit
 }
 
 tap () {
-    x=$(pwd)
+    wd=$(pwd)
     cd "$WD/src/js"
+    echo $(pwd)
     node test.js | awk '/^[^ok]/'
-    cd "$x"
+    cd "$wd" || exit
 }
 
 export -f fmt
-export -f lint
-export -f search
 export -f tap
+alias jshint='$WD/node_modules/jshint/bin/jshint -c $WD/.jshintrc'
 
 set +eu

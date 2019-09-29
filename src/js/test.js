@@ -4,7 +4,9 @@ var fs = require("fs");
 var test = require("tape");
 
 function readFile(path) {
-    return fs.readFileSync(path).toString();
+    var file = fs.readFileSync(path).toString().split("\n");
+    file.shift();
+    return file.join("\n");
 }
 
 eval(readFile("./iterators.js"));

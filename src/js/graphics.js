@@ -1,3 +1,7 @@
+"use strict";
+
+/*  global findAll, permute */
+
 function textColor(id, color) {
     var element = document.getElementById(id);
     if (element) {

@@ -1,3 +1,7 @@
+"use strict";
+
+/*  global mul */
+
 function zip(xs, ys) {
     var n = xs.length;
     var zs = new Array(n);

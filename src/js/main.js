@@ -1,3 +1,8 @@
+"use strict";
+
+/*  global calculateEdges, createCircle, createSquare, emptyCoordinate,
+        neuralNetwork, normalize, transpose, textColor, unitScale, zip */
+
 function updateText(color, i) {
     for (var j = 0; j < color.n; j++) {
         if (i === j) {
