@@ -25,9 +25,9 @@ fmt () {
     cd "$WD" || exit
     tidy -q -m "$WD/src/index.html"
     sed -i 's/[ \t]\+$//' "$WD/src/index.html"
-    for f in "$WD"/src/js/*.js; do
-        echo "$f"
-        clang-format -i "$f"
+    for x in "$WD"/src/js/*.js; do
+        echo "$x"
+        clang-format -i "$x"
     done
     cd "$wd" || exit
 }
