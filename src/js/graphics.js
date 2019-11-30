@@ -12,33 +12,46 @@ function textColor(id, color) {
 function createSvg(id, shape, attributes) {
     var svg = document.createElementNS("http://www.w3.org/2000/svg", shape);
     var n = attributes.length;
-    for (var i = 0; i < n; i++) {
-        svg.setAttribute(attributes[i][0], attributes[i][1]);
+    for (var i = 0; i < n; i += 2) {
+        svg.setAttribute(attributes[i], attributes[i + 1]);
     }
     document.getElementById(id).appendChild(svg);
 }
 
 function createSquare(containerId, unit, id, x, y, color) {
     var attributes = [
-        ["id", id],
-        ["x", x],
-        ["y", y],
-        ["width", unit],
-        ["height", unit],
-        ["fill", color],
-        ["opacity", 0.45],
+        "id",
+        id,
+        "x",
+        x,
+        "y",
+        y,
+        "width",
+        unit,
+        "height",
+        unit,
+        "fill",
+        color,
+        "opacity",
+        0.45,
     ];
     createSvg(containerId, "rect", attributes);
 }
 
 function createCircle(containerId, radius, id, x, y, color) {
     var attributes = [
-        ["id", id],
-        ["cx", x + radius],
-        ["cy", y + radius],
-        ["r", radius * 0.82],
-        ["fill", color],
-        ["opacity", 0.9],
+        "id",
+        id,
+        "cx",
+        x + radius,
+        "cy",
+        y + radius,
+        "r",
+        radius * 0.82,
+        "fill",
+        color,
+        "opacity",
+        0.9,
     ];
     createSvg(containerId, "circle", attributes);
 }
